@@ -1,0 +1,55 @@
+header, main, footer {
+    padding-left: 300px;
+}
+
+@media only screen and (max-width : 992px) {
+    header, main, footer {
+        padding-left: 0;
+    }
+}
+
+nav {
+    background-color: #605ca8;
+
+}
+
+.consulta-tabla label{
+    font-size: 14px;
+    color: black;
+}
+
+.consulta-tabla .pagination li a{
+    font-size: 14px;
+}
+
+.consulta-tabla tr{
+    height: 35px;
+}
+
+.dataTables_length label{
+    margin-top: 22px;
+}
+.consulta-tabla  .row{
+    margin-bottom: 0px;
+}
+
+.consulta-tabla .table > thead > tr > th, .consulta-tabla .table > tbody > tr > td{
+    vertical-align: middle;
+    text-align: center;
+}
+
+.btn-view, .btn-view:hover{
+    background-color: #269a8b;
+    color: white;
+}
+
+
+.btn-danger, .btn-danger:hover{
+    background-color: #b4180b;
+    color: white;
+}
+
+.btn-active, .btn-active:hover{
+    background-color: #38822c;
+    color: white;
+}

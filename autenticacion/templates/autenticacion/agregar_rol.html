@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load material_form %}
+
+{% block content %}
+    <form action="" method="POST" class="viewform">
+        {% csrf_token %}
+        {% form form=form %}
+            {% part form.name prefix %}<i class="material-icons prefix">perm_identity</i>{% endpart %}
+        {% endform %}
+        {% if actualizar == True %}
+            <button class="btn btn-primary"  type="submit" name="action" >Actualizar
+                <i class="material-icons right">send</i>
+            </button>
+            <a class="btn btn-danger" href="{% url 'roles' %}">Cancelar<i class="material-icons right">cancel</i></a>
+        {% else %}
+            <button class="btn btn-primary"  type="submit" name="action" >Registrar
+                <i class="material-icons right">send</i>
+            </button>
+        {% endif %}
+    </form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% autoescape off %}
+Buen día {{ user.first_name }} {{ user.last_name }}, para completar el registro de su usuario es necesario que especifique la contraseña con la cual accederá al Sistema de Planilla.
+
+Por favor, vaya a la página siguiente y escoja una nueva contraseña.
+{% block reset_link %}
+{{ request.scheme }}://{{ request.get_host }}{% url 'restablecer_contraseña_confirmar' uidb64=uid token=token %}
+{% endblock %}
+Su nombre de usuario, con el que iniciará sesión: {{ user.get_username }}
+
+En caso que usted no haya solicitado un usuario en el Sistema de Planilla omita este correo.
+
+{% endautoescape %}

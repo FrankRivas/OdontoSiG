@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SI gerencial</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'gerencial/favicon.png' %}">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'gerencial/css/bootstrap.min.css' %}">
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href={% static 'gerencial/select2/select2.css'%}>
+
+    <!-- Bootstrap DatePicker -->
+    <link rel="stylesheet" type="text/css" href="{% static 'gerencial/css/bootstrap-datepicker.min.css' %}">
+
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="{% static 'gerencial/css/materialize.min.css' %}" media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'gerencial/css/multi-select.css' %}">
+
+    <link rel="stylesheet" href="{% static 'gerencial/css/sweetalert.css' %}">
+    <link rel="stylesheet" href="{% static 'gerencial/css/dataTable.boostrap.min.css' %}" />
+    <!--EStilos Personales-->
+    <link type="text/css" rel="stylesheet" href="{% static 'gerencial/css/estilos_personales.css' %}" />
+
+</head>
+<body>
+<header>
+    <nav>
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <div class="nav-wrapper">
+            <ul id="nav-mobile" class="right">
+                <li class="hide-on-small-only"><a href="{% url 'home' %}">Inicio</a></li>
+                <li> <a href="{% url 'cuenta' %}">Cuenta</a></li>
+                <li><a href="{% url 'logout' %}"><i class="material-icons right">exit_to_app</i>Cerrar Sesion</a></li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<aside >
+    <ul id="slide-out" class="sidenav sidenav-fixed">
+        <li><div class="user-view">
+            <div class="background">
+                <img src="{% static 'gerencial/img/solid_img.PNG' %}" >
+            </div>
+            <p href="#name"><span class="white-text name">{{ request.user.first_name}} {{ request.user.last_name}}</span></p>
+            <span class="white-text email">{{ request.user.email }}</span>
+        </div></li>
+
+        <ul class="collapsible" data-collapsible="accordion">
+            {% if perms.auth.add_user or perms.auth.change_user or perms.auth.delete_user%}
+                <li><div class="divider"></div></li>
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Usuarios</div>
+                    {% if perms.auth.add_user %}
+                        <div class="collapsible-body"><span><a href="{% url 'agregar_usuario' %}"><center>Agregar Usuario</center></a></span></div>
+                    {% endif %}
+                    {% if perms.auth.change_user or perms.auth.delete_user%}
+                        <div class="collapsible-body"><span><a href="{% url 'usuarios' %}"><center>Consultar Usuarios</center></a></span></div>
+                    {% endif %}
+                </li>
+            {% endif %}
+        </ul>
+    </ul>
+</aside>
+<main>
+    <div class="container">
+        {% block content %}
+
+        {%endblock%}
+    </div>
+</main>
+
+<!--JavaScript at end of body for optimized loading-->
+<script src="{% static 'gerencial/js/jquery-2.1.1.js' %}"></script>
+<script src="{% static 'gerencial/js/jquery.mask.js' %}"></script>
+<script src="{% static 'gerencial/js/materialize.min.js' %}"></script>
+<script src="{% static 'gerencial/js/sweetalert.min.js' %}"></script>
+<script src="{% static 'gerencial/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'gerencial/select2/select2.js' %}"></script>
+<script src="{% static 'gerencial/js/bootstrap-datepicker.min.js' %}"></script>
+<script src="{% static 'gerencial/js/bootstrap-datepicker.es.min.js' %}"></script>
+<script src="{% static 'gerencial/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'gerencial/js/dataTables.boostrap.min.js' %}"></script>
+<script src="{% static 'gerencial/js/table.js' %}"></script>
+{% if mensaje %}
+    <script type="text/javascript">
+        (function () { M.toast({html: '{{ mensaje }}', classes: 'rounded'}); })();
+    </script>
+{% endif %}
+{% if messages %}
+    {% for message in messages %}
+        <script type="text/javascript">
+            (function () { M.toast({html: '{{ message.message }}', classes: 'rounded'}); })();
+        </script>
+    {% endfor %}
+{% endif %}
+<script type="text/javascript">
+    (function () { M.AutoInit(); })();
+</script>
+{% block js %}
+{% endblock %}
+</body>
+</html>
