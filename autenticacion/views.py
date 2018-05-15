@@ -17,23 +17,41 @@ from django.contrib.auth import tokens
 from material import *
 from .forms import UsuarioForm
 from django.db.models import Q
+from django.conf import settings
+from axes.models import AccessAttempt
+from axes.utils import reset
 
 # Create your views here.
 def login(request):
     mensaje = ""
     next = request.GET.get('next')
     if request.POST:
-        username = request.POST.get('LoginForm[username]')
-        password = request.POST.get('LoginForm[password]')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
         if user is not None:
             auth_login(request, user)
+            reset(username=username)
             if next:
                 return redirect(next)
             else:
                 return redirect('/')
         else:
             mensaje = "Usuario o Contraseña Incorrecto"
+            try:
+                axes = AccessAttempt.objects.get(username=username)
+                user = User.objects.get(username=username)
+                if user.is_active:
+                    if axes.failures_since_start >=settings.AXES_FAILURE_LIMIT:
+                        user.is_active = False
+                        user.save()
+                        mensaje = "Usuario bloqueado, póngase en contacto con el administrador"
+                    else:
+                        mensaje = "Contraseña errónea le quedan " + str(settings.AXES_FAILURE_LIMIT-axes.failures_since_start) + " intentos"
+                else:
+                    mensaje = "Usuario bloqueado, póngase en contacto con el administrador"
+            except:
+                pass
             return render(request, 'autenticacion/login.html', {'mensaje': mensaje, })
     else:
         return render(request, 'autenticacion/login.html', {'mensaje': mensaje, })
@@ -147,4 +165,13 @@ def eliminar_usuario(request, pk):
     else:
         messages.add_message(request, messages.INFO, 'No puede eliminar su propio usuario')
     return HttpResponseRedirect('/usuarios')
+
+def bloquear_usuario(request, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active = not user.is_active
+    user.save()
+    reset(username=user.username)
+    messages.add_message(request, messages.INFO, 'Cambio de estado exitoso')
+
+    return HttpResponseRedirect(reverse("usuarios"))
 # Finalizan vistas para Usuarios

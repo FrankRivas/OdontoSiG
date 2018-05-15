@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'axes'
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,30 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+    'axes_cache': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
+
+AXES_CACHE = 'axes_cache'
+# Límite máximo de intentos fallidos
+AXES_FAILURE_LIMIT = 3
+# Diferenciar entre usuarios de una misma ip
+AXES_USE_USER_AGENT = True
+# Bloquear sólo por usuario no por ip
+AXES_ONLY_USER_FAILURES = True
+# Reestablecer el contador de intentos fallidos después de 1 hora
+AXES_COOLOFF_TIME = 1
 
 ROOT_URLCONF = 'sig_odonto.urls'
 LOGIN_URL = '/login'
@@ -83,10 +108,15 @@ WSGI_APPLICATION = 'sig_odonto.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bd_gerenciales',
+        'USER': 'gerencial_user',
+        'PASSWORD': 'gerenciales',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
+
 
 
 # Password validation

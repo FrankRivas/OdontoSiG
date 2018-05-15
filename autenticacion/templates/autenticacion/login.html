@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="http://34.227.32.120/web/favicon.png" type="image/png">
     <title>SCSAB-FOUES Entrar</title>
+
     <link href="{% static 'login/font-awesome.min.css' %}" rel="stylesheet">
-<link href="{% static 'login/bootstrap.css' %}" rel="stylesheet">
-<link href="{% static 'login/AdminLTE.min.css' %}" rel="stylesheet">
-<link href="{% static 'login/_all-skins.min.css' %}" rel="stylesheet"></head>
+    <link href="{% static 'login/bootstrap.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{% static 'gerencial/css/materialize.min.css' %}" media="screen,projection"/>
+    <link href="{% static 'login/AdminLTE.min.css' %}" rel="stylesheet">
+    <link href="{% static 'login/_all-skins.min.css' %}" rel="stylesheet">
+
+
+</head>
 <body class="login-page">
 
 
-    
+
 <div class="login-box">
     <div class="login-logo">
         <img src="{% static 'login/logo.png' %}" height="120"><br>
@@ -22,29 +28,28 @@
     <div class="login-box-body">
         <p class="login-box-msg">Registrate para iniciar sesión</p>
 
-        <form id="login-form" action="" method="post" role="form">
+        <form id="login-form" action="" method="post" >
             {% csrf_token %}
-        <div class="form-group has-feedback field-loginform-username required">
+            <div class="form-group has-feedback field-loginform-username required">
 
-<input type="text" id="loginform-username" class="form-control" name="LoginForm[username]" placeholder="Username"><span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                <input type="text" id="loginform-username" class="form-control" name="username" placeholder="Username"><span class="glyphicon glyphicon-envelope form-control-feedback"></span>
 
-<p class="help-block help-block-error"></p>
-</div>
-        <div class="form-group has-feedback field-loginform-password required">
+                <p class="help-block help-block-error"></p>
+            </div>
+            <div class="form-group has-feedback field-loginform-password required">
 
-<input type="password" id="loginform-password" class="form-control" name="LoginForm[password]" placeholder="Password"><span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                <input type="password" id="loginform-password" class="form-control" name="password" placeholder="Password"><span class="glyphicon glyphicon-lock form-control-feedback"></span>
 
-<p class="help-block help-block-error"></p>
-</div>        
-        <div class="form-group field-loginform-hiddenbox">
+                <p class="help-block help-block-error"></p>
+            </div>
+            <div class="form-group field-loginform-hiddenbox">
 
-<input type="hidden" id="loginform-hiddenbox" class="form-control" name="LoginForm[hiddenBox]" value="1">
 
-<p class="help-block help-block-error"></p>
-</div>        <div class="row">
+                <p class="help-block help-block-error"></p>
+            </div>        <div class="row">
             <!-- /.col -->
             <div class="col-xs-4">
-                <button type="submit" class="btn btn-primary btn-block btn-flat" name="login-button">Entrar</button>            </div>
+                <button type="submit" class="btn btn-primary" name="login-button">Entrar</button>            </div>
             <!-- /.col -->
         </div>
 
@@ -53,5 +58,11 @@
     </div>
     <!-- /.login-box-body -->
 </div><!-- /.login-box -->
-
+<script src="{% static 'autenticacion/js/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'gerencial/js/materialize.min.js' %}"></script>
+{% if mensaje %}
+    <script type="text/javascript">
+        (function () { M.toast({html: '{{ mensaje }}', classes: 'rounded'}); })();
+    </script>
+{% endif %}
 </body></html>

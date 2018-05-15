@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^usuarios/$', usuarios, name='usuarios'),
     url(r'^actualizar_usuario/(?P<pk>\d+)$', ActualizarUsuario.as_view(), name='actualizar_usuario'),
     url(r'^eliminar_usuario/(?P<pk>\d+)$', eliminar_usuario, name='eliminar_usuario'),
+    url(r'^bloquear_usuario/(?P<pk>\d+)$', bloquear_usuario, name='bloquear_usuario'),
     # Finalizan urls para Usuario
 
     url(r'^restablecer-contraseña/$', password_reset, {'post_reset_redirect': 'restablecer_contraseña_hecho'}, name='restablecer-contraseña'),
