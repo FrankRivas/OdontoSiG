@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+        <form method="post">
+            {% csrf_token %}
+            {% if msj == "Activar" %}
+                <input type="hidden"  name="mensaje" readonly="readonly" value="activar">
+            {% elif not usuario.is_active %}
+                <input type="hidden"  name="mensaje" readonly="readonly" value="desactivar">
+            {% endif %}
+            </br></br></br>
+            <span>Realmente Desea </span>
+            <label value="{{ msj }}">{{ msj }}</label>
+            <span> El Usuario: </span>
+            <p> </p>
+
+            <input type="text"  class="form-control" readonly="readonly" value="{{ usuario.username|title }}">
+
+
+            <a class="btn btn-primary" href="{% url 'usuarios' %}" type="submit">Cancelar
+                <i class="material-icons right">cancel</i></a>
+
+            <a class="btn btn-danger" href="/desactivar_usuario/{{usuario.id}}" type="submit">Aceptar
+                <i class="material-icons right">warning</i></a>
+
+        </form>
+
+{%endblock%}

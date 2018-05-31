@@ -12,8 +12,10 @@
                 <th>Correo Electrónico</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Rol</th>
                 <th>¿Usuario Bloqueado?</th>
                 <th>Acciones</th>
+
             </tr>
             </thead>
             <tbody>
@@ -23,20 +25,18 @@
                     <td>{{user.email}}</td>
                     <td>{{user.first_name|title}}</td>
                     <td>{{user.last_name|title}}</td>
-                    {% if perms.auth.change_user%}
+                    <td>{{user.groups.first|title}}</td>
+
                         {% if user.is_active %}
-                            <td><a class="btn btn-active waves-effect waves-light" onclick="Desbloquear{{ user.id }}()"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a></td>
-                        {% else %}
-                            <td><a class="btn btn-danger waves-effect waves-light" onclick="Desbloquear{{ user.id }}()"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
-                        {% endif %}
-                    {% endif %}
+                           <td style="text-align:center"><a class="btn btn-primary" href="/confirmar_desactivar_usuario/{{user.id}}"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a></td>
+                          {% else %}
+                           <td><a class="btn btn-danger" href="/confirmar_desactivar_usuario/{{user.id}}"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                           {% endif %}
+
                     <td>
-                        {% if perms.auth.change_user%}
+
                             <a class="btn btn-primary waves-effect waves-light" href="/actualizar_usuario/{{ user.id }}"><i class="material-icons">edit</i></a>
-                        {% endif %}
-                        {% if perms.auth.delete_user%}
-                            <a class="btn btn-danger waves-effect waves-light" onclick="Eliminar{{ user.id }}()"><i class="material-icons">delete</i></a>
-                        {% endif %}
+
                     </td>
                 </tr>
             {% endfor %}
@@ -44,27 +44,6 @@
         </table>
     </div>
     {% for user in user_list %}
-        <script type="text/javascript">
-            function Eliminar{{ user.id }}(){
-                swal({   title: "¡Se eliminará el usuario {{ user.username }}!",
-                        text: "¿Está seguro que desea continuar?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Sí, deseo continuar",
-                        cancelButtonText: "No, no estoy seguro",
-                        closeOnConfirm: false,
-                        closeOnCancel: false },
-                    function(isConfirm){
-                        if (isConfirm)
-                        {
-                            window.location.href = '{% url 'eliminar_usuario' pk=user.id %}';
-                        }
-                        else {
-                            swal("Cancelar", "¡Se canceló la operación!", "error");
-                        } });
-            }
-        </script>
         <script type="text/javascript">
             function Desbloquear{{ user.id }}(){
                 swal({   title: "¡Se {% if not user.is_active %}des{% endif %}bloqueará el usuario {{ user.username }}!",

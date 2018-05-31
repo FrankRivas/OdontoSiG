@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    </br>
     <div class="col s12">
-        <h5>Configuración de cuenta:</h5>
+        <h5>Configuración de Cuenta de Usuario:</h5>
     </div>
+    </br>
+    </br>
     <form method="post">
         {% csrf_token %}
         <div class="row">
@@ -20,28 +23,37 @@
             </div>
         </div>
         <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col m6 s12">
+                <i class="material-icons prefix">email</i>
+                <input id="username" type="text" value="{{ username }}" name="username" >
+                <label for="contraseña">Nombre de Usuario:</label>
+            </div>
+
+            <div class="input-field col m6 s12">
                 <i class="material-icons prefix">email</i>
                 <input id="correo" type="email" class="validate" value="{{ email }}" name="correo" data-length="254">
                 <label for="contraseña" data-error="Incorrecto" data-success="Correcto">Email:</label>
             </div>
         </div>
         <div class="row">
-            <div class="input-field col s12">
+            <div class="input-field col m6 s12">
                 <i class="material-icons prefix">lock</i>
                 <input id="contraseña" type="password" class="validate" name="contraseña">
                 <label for="contraseña">Contraseña nueva:</label>
             </div>
-        </div>
-        <div class="row">
-            <div class="input-field col s12">
+
+            <div class="input-field col m6 s12">
                 <i class="material-icons prefix">lock</i>
                 <input id="contraseña2" type="password" class="validate" name="contraseña2">
                 <label for="contraseña2">Confirme contraseña nueva:</label>
             </div>
+
         </div>
+
         <button class="btn waves-effect waves-light"  type="submit" name="action" href="{% url 'cuenta' %}">Actualizar
             <i class="material-icons right">send</i>
         </button>
+        <a class="btn btn-danger" href="{% url 'home' %}" type="submit">Cancelar
+                    <i class="material-icons right">cancel</i></a>
     </form>
 {%endblock%}

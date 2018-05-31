@@ -8,11 +8,13 @@ urlpatterns = [
     url(r'^cuenta/$', cuenta, name='cuenta'),
 
     # Inician urls para Usuario
-    url(r'^agregar_usuario/', agregar_usuario, name='agregar_usuario'),
+
     url(r'^usuarios/$', usuarios, name='usuarios'),
-    url(r'^actualizar_usuario/(?P<pk>\d+)$', ActualizarUsuario.as_view(), name='actualizar_usuario'),
-    url(r'^eliminar_usuario/(?P<pk>\d+)$', eliminar_usuario, name='eliminar_usuario'),
+    url(r'^actualizar_usuario/(?P<id>\d+)$', recuperarContra, name='actualizar_usuario'),
     url(r'^bloquear_usuario/(?P<pk>\d+)$', bloquear_usuario, name='bloquear_usuario'),
+    url(r'^agregar_usuarios/', registroUsuario, name='agregar_usuarios'),
+    url(r'^confirmar_desactivar_usuario/(?P<id>[0-9]+)$', confirmar_desactivar_usuario, name='confirmar_desactivar_usuario'),
+    url(r'^desactivar_usuario/(?P<id>[0-9]+)$', desactivar_usuario, name='desactivar_empleado'),
     # Finalizan urls para Usuario
 
     url(r'^restablecer-contraseña/$', password_reset, {'post_reset_redirect': 'restablecer_contraseña_hecho'}, name='restablecer-contraseña'),

@@ -35,7 +35,6 @@
         <div class="nav-wrapper">
             <ul id="nav-mobile" class="right">
                 <li class="hide-on-small-only"><a href="{% url 'home' %}">Inicio</a></li>
-                <li> <a href="{% url 'cuenta' %}">Cuenta</a></li>
                 <li><a href="{% url 'logout' %}"><i class="material-icons right">exit_to_app</i>Cerrar Sesion</a></li>
             </ul>
         </div>
@@ -47,23 +46,50 @@
             <div class="background">
                 <img src="{% static 'gerencial/img/solid_img.PNG' %}" >
             </div>
-            <p href="#name"><span class="white-text name">{{ request.user.first_name}} {{ request.user.last_name}}</span></p>
+            <a href="{% url 'cuenta' %}"><span class="white-text name">{{ request.user.first_name}} {{ request.user.last_name}}</span></a>
             <span class="white-text email">{{ request.user.email }}</span>
         </div></li>
 
         <ul class="collapsible" data-collapsible="accordion">
-            {% if perms.auth.add_user or perms.auth.change_user or perms.auth.delete_user%}
-                <li><div class="divider"></div></li>
-                <li>
-                    <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Usuarios</div>
-                    {% if perms.auth.add_user %}
-                        <div class="collapsible-body"><span><a href="{% url 'agregar_usuario' %}"><center>Agregar Usuario</center></a></span></div>
-                    {% endif %}
-                    {% if perms.auth.change_user or perms.auth.delete_user%}
-                        <div class="collapsible-body"><span><a href="{% url 'usuarios' %}"><center>Consultar Usuarios</center></a></span></div>
-                    {% endif %}
-                </li>
-            {% endif %}
+            {% for groups in request.user.groups.values_list %}
+                {% for group in groups %}
+                    {% if group == 'Estrategico'%}
+                        <li><div class="divider"></div></li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Reportes Estrategicos</div>
+
+                                <div class="collapsible-body"><span><a href="#"><center>Reporte 1</center></a></span></div>
+
+
+                                <div class="collapsible-body"><span><a href="#"><center>Reporte 2</center></a></span></div>
+
+                        </li>
+                        {% elif group == 'Tactico'%}
+                        <li><div class="divider"></div></li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Reportes Tacticos</div>
+
+                                <div class="collapsible-body"><span><a href="#"><center>Reporte 1</center></a></span></div>
+
+
+                                <div class="collapsible-body"><span><a href="#"><center>Reporte 2</center></a></span></div>
+
+                        </li>
+        {%elif group == 'Administrador'%}
+                        <li><div class="divider"></div></li>
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Usuarios</div>
+
+                                <div class="collapsible-body"><span><a href="{% url 'agregar_usuarios' %}"><center>Agregar Usuario</center></a></span></div>
+
+
+                                <div class="collapsible-body"><span><a href="{% url 'usuarios' %}"><center>Consultar Usuarios</center></a></span></div>
+
+                        </li>
+
+                    {%endif%}
+                {% endfor %}
+            {% endfor %}
         </ul>
     </ul>
 </aside>

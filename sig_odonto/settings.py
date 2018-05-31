@@ -72,7 +72,7 @@ CACHES = {
 
 AXES_CACHE = 'axes_cache'
 # Límite máximo de intentos fallidos
-AXES_FAILURE_LIMIT = 3
+AXES_FAILURE_LIMIT = 4
 # Diferenciar entre usuarios de una misma ip
 AXES_USE_USER_AGENT = True
 # Bloquear sólo por usuario no por ip
