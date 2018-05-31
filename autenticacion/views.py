@@ -158,10 +158,11 @@ def registroUsuario(request):
             last_name = form.cleaned_data['apellido']
             if password2 == password:
                 #new_user = User.objects.create_user(username, email, password,first_name,last_name)
+                encrypted_pass = make_password(password, None, 'argon2')
                 new_user = User.objects.create(
                     username=username,
                     email=email,
-                    password=password,
+                    password=encrypted_pass,
                     first_name=first_name,
                     last_name=last_name
                 )
