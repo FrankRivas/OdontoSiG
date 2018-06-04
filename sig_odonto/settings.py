@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'material.admin',
     'autenticacion',
     'gerencial',
+    'highcharts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -169,5 +170,10 @@ DATETIME_INPUT_FORMATS = ('%m/%d/%Y %H:%M:%S %p')
 # Deployment Environment
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Development Environment
-STATICFILES_DIRS = (os.path.join (BASE_DIR, "gerencial/static", "autenticacion/static"),)
+#STATICFILES_DIRS = (os.path.join (BASE_DIR, "gerencial/static", "autenticacion/static","django-highcharts/highcharts/static"),)
+STATICFILES_DIRS = [
+    "gerencial/static",
+    "autenticacion/static",
+    "django-highcharts/highcharts/static"
+]
 STATIC_URL = '/static/'
