@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <script src="{% static 'gerencial/js/jquery-2.1.1.js' %}"></script>
+    <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/highcharts.src.js' %}"></script>
+    <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/exporting.js' %}"></script>
+    <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/export-data.js' %}"></script>
+    <script src="{% static 'gerencial/js/prueba_exportar.js' %}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            var token = $("[name=csrfmiddlewaretoken]").val();
+
+            //Asignar el token de seguridad de django a la cabecera de las request de ajax
+            $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", token);
+                }
+            });
+
+            crear();
+        });
+
+    </script>
+    {% csrf_token %}
+    <div class="col s12">
+        <div class="row">
+        <h6>PRUEBA DE IMPORTACIÓN Y CREACIÓN DE HIGHCHARTS</h6>
+        </div>
+    </div>
+
+    <div class="col s12" style="height: 700px"  id="container">
+    </div>
+
+{% endblock %}

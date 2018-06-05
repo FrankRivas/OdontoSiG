@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'material.admin',
     'autenticacion',
     'gerencial',
-    'highcharts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -173,7 +172,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 #STATICFILES_DIRS = (os.path.join (BASE_DIR, "gerencial/static", "autenticacion/static","django-highcharts/highcharts/static"),)
 STATICFILES_DIRS = [
     "gerencial/static",
-    "autenticacion/static",
-    "django-highcharts/highcharts/static"
+    "autenticacion/static"
 ]
 STATIC_URL = '/static/'
