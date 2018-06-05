@@ -50,11 +50,11 @@ def login(request):
                     if axes.failures_since_start >=settings.AXES_FAILURE_LIMIT:
                         user.is_active = False
                         user.save()
-                        mensaje = "Usuario bloqueado, póngase en contacto con el administrador"
+                        mensaje = "Usuario bloqueado, contacte al administrador"
                     else:
-                        mensaje = "Contraseña errónea le quedan " + str(settings.AXES_FAILURE_LIMIT-axes.failures_since_start) + " intentos"
+                        mensaje = "Datos Incorrectos, le quedan " + str(settings.AXES_FAILURE_LIMIT-axes.failures_since_start) + " intentos"
                 else:
-                    mensaje = "Usuario bloqueado, póngase en contacto con el administrador"
+                    mensaje = "Usuario bloqueado, contacte al administrador"
             except:
                 pass
             return render(request, 'autenticacion/login.html', {'mensaje': mensaje, })
@@ -74,12 +74,13 @@ def recuperarContra(request, id):
             if request.POST.get('contraseña') == request.POST.get('contraseña2'):
                 usuario.password = make_password(request.POST.get('contraseña'), None, 'argon2')
 
-                id_accion = Accion.objects.get(pk=7)
+                id_accion = Accion.objects.get(pk=2)
                 id = id_accion.id
 
                 new_user_bit = Bitacora.objects.create(
                     Usuario_id=request.user.id,
-                    Accion_id=id
+                    Accion_id=id,
+                    Afectado=usuario.username
                 )
 
             else:
