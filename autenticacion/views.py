@@ -20,6 +20,11 @@ from django.db.models import Q
 from django.conf import settings
 from axes.models import AccessAttempt
 from axes.utils import reset
+from gerencial.models import Bitacora, Accion
+import datetime
+import locale
+from datetime import datetime
+
 
 # Create your views here.
 def login(request):
@@ -68,11 +73,21 @@ def recuperarContra(request, id):
         if request.POST.get('contraseña'):
             if request.POST.get('contraseña') == request.POST.get('contraseña2'):
                 usuario.password = make_password(request.POST.get('contraseña'), None, 'argon2')
+
+                id_accion = Accion.objects.get(pk=7)
+                id = id_accion.id
+
+                new_user_bit = Bitacora.objects.create(
+                    Usuario_id=request.user.id,
+                    Accion_id=id
+                )
+
             else:
                 mensaje = "Las contraseñas no coinciden, vuelva a intentarlo"
                 return render(request, "autenticacion/contra.html",{'mensaje': mensaje})
         try:
             usuario.save()
+            new_user_bit.save()
             messages.add_message(request, messages.INFO, 'Contraseña Modificada con Exito')
             return HttpResponseRedirect('/usuarios', )
         except:
@@ -110,7 +125,21 @@ def cuenta(request):
             mensaje = "Datos modificados con éxito"
         except:
             mensaje = "Error al modificar datos"
-    user = User.objects.get(pk=user.id)
+
+        user = User.objects.get(pk=user.id)
+
+        id_accion = Accion.objects.get(pk=3)
+        id = id_accion.id
+
+        new_user_bit = Bitacora.objects.create(
+            Usuario_id=request.user.id,
+            Accion_id=id
+        )
+        try:
+            new_user_bit.save()
+        except:
+            pass
+
     context = {'nombre': user.first_name,
                'apellido': user.last_name,
                'email': user.email,
@@ -124,6 +153,18 @@ def cuenta(request):
 def usuarios(request):
     mensaje=""
     user_list=User.objects.all().exclude(pk=request.user.id)
+
+    id_accion = Accion.objects.get(pk=4)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
 
     return render(request, 'autenticacion/usuarios.html', {'user_list': user_list, 'mensaje': mensaje, })
 
@@ -144,7 +185,7 @@ def bloquear_usuario(request, pk):
 def registroUsuario(request):
 
     mensaje = ""
-
+    locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
     if request.method == 'POST':
         form=UsuarioForm2(request.POST or None)
         form2=RolForm(request.POST or None)
@@ -169,9 +210,22 @@ def registroUsuario(request):
                 new_user.is_active = True
                 rol = form2.cleaned_data['group']
                 new_user.groups.add(rol)
+
+                id_accion = Accion.objects.get(pk=1)
+                id = id_accion.id
+
+                new_user_bit = Bitacora.objects.create(
+                    Usuario_id=request.user.id,
+                    Accion_id=id,
+                    Afectado=username
+                )
+
                 try:
                     new_user.save()
                     mensaje = "Usuario Creado con Exito"
+
+                    new_user_bit.save()
+
                     form = UsuarioForm2()
                     form2 = RolForm()
                 except:
@@ -208,6 +262,19 @@ def desactivar_usuario(request, id):
         usuario.is_active = 1
         reset(username=usuario.username)
     usuario.save()
+
+    id_accion = Accion.objects.get(pk=5)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id,
+        Afectado=usuario.username
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
     messages.add_message(request, messages.INFO, 'Se Modifico Exitosamente')
     return HttpResponseRedirect('/usuarios')
 # Finalizan Vistas para Usuarios

@@ -24,6 +24,11 @@
 
     <link rel="stylesheet" href="{% static 'gerencial/css/sweetalert.css' %}">
     <link rel="stylesheet" href="{% static 'gerencial/css/dataTable.boostrap.min.css' %}" />
+
+    <!--EStilos Datatable-->
+    <link rel="stylesheet" href="{% static 'gerencial/css/dataTables.bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'gerencial/css/buttons.dataTables.min.css' %}" />
+
     <!--EStilos Personales-->
     <link type="text/css" rel="stylesheet" href="{% static 'gerencial/css/estilos_personales.css' %}" />
 
@@ -87,6 +92,16 @@
 
                         </li>
 
+                        <li>
+                            <div class="collapsible-header"><i class="material-icons">assignment</i>Bitacoras</div>
+
+                                <div class="collapsible-body"><span><a href="{% url 'reporte_bitacora' %}"><center>Bitacora de Acciones</center></a></span></div>
+
+
+                                <div class="collapsible-body"><span><a href="{% url 'reporte_conexiones' %}"><center>Ultimas Conexiones</center></a></span></div>
+
+                        </li>
+
                     {%endif%}
                 {% endfor %}
             {% endfor %}
@@ -112,6 +127,14 @@
 <script src="{% static 'gerencial/js/bootstrap-datepicker.es.min.js' %}"></script>
 <script src="{% static 'gerencial/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'gerencial/js/dataTables.boostrap.min.js' %}"></script>
+
+<script src="{% static 'gerencial/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'gerencial/js/buttons.flash.min.js' %}"></script>
+<script src="{% static 'gerencial/js/jszip.min.js' %}"></script>
+<script src="{% static 'gerencial/js/pdfmake.min.js' %}"></script>
+<script src="{% static 'gerencial/js/vfs_fonts.js' %}"></script>
+<script src="{% static 'gerencial/js/buttons.html5.min.js' %}"></script>
+
 <script src="{% static 'gerencial/js/table.js' %}"></script>
 {% if mensaje %}
     <script type="text/javascript">
