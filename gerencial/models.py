@@ -16,7 +16,7 @@ class Pieza(models.Model):
     Paciente = models.ForeignKey(Paciente)
 
 class Carie(models.Model):
-    Descripcion = models.CharField(max_length=25, null=False)
+    Descripcion = models.CharField(max_length=255, null=False)
 
     def __str__(self):
         return self.Descripcion

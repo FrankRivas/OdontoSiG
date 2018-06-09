@@ -9,7 +9,7 @@ from django import forms
 import base64
 from .forms import *
 from decimal import Decimal
-
+from django.db import connection
 from gerencial.models import Bitacora, Accion
 from django.contrib.auth.models import User
 import locale
@@ -68,6 +68,43 @@ def reporte_conexion(request):
     }
 
     return render(request, 'reporte_conexiones.html', context)
+
+def reporte_tactico2(request):
+    if request.method=='POST':
+        print('Hay haces los filtros')
+    else: #Desde el principio de los tiempos
+        context = {}
+        cpod_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion"<47 group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
+        ceod_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion">51 group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
+        cpom_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where ("Posicion"=16 or "Posicion"=26 or "Posicion"=36 or "Posicion"=46) group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
+        cpos_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_superficie as b on a.id=b."Paciente_id" group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
+        with connection.cursor() as cursor:
+            #Para CPOD
+            cursor.execute(cpod_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
+            cpod = dictfetchall(cursor)
+            context['cpod'] = cpod
+            # Para ceod
+            cursor.execute(cpod_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
+            cpod = dictfetchall(cursor)
+            context['ceod'] = cpod
+            # Para CPOM
+            cursor.execute(cpod_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
+            cpod = dictfetchall(cursor)
+            context['cpom'] = cpod
+            # Para CPOS
+            cursor.execute(cpos_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
+            cpod = dictfetchall(cursor)
+            context['cpos'] = cpod
+    print(context)
+    return render(request, 'reporte_tactico2.html', context)
+
+def dictfetchall(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
 
 #Highchars
 def pruebas(self):
