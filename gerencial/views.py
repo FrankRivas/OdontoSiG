@@ -10,7 +10,7 @@ import base64
 from .forms import *
 from decimal import Decimal
 from django.db import connection
-from gerencial.models import Bitacora, Accion
+from gerencial.models import Bitacora, Accion, Paciente
 from django.contrib.auth.models import User
 import locale
 import datetime
@@ -69,42 +69,57 @@ def reporte_conexion(request):
 
     return render(request, 'reporte_conexiones.html', context)
 
+#Inicia reporte de frecuencias grupales
+
 def reporte_frec_grupales(request):
+
     if request.method=='POST':
-        print('Hay haces los filtros')
+        fecha_inicio = request.POST.get('fecha_desde')
+        fecha_final = request.POST.get('fecha_hasta')
+        criterio = request.POST.get('criterio')
+        cod_criterio = '"EstICDAS"'
+        if criterio == '1':
+            cod_criterio = '"EstOMS"'
+        context = consultar_indices(cod_criterio, fecha_inicio, fecha_final)
     else: #Desde el principio de los tiempos
-        context = {}
-        cpod_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion"<47 group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
-        ceod_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion">51 group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
-        cpom_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where ("Posicion"=16 or "Posicion"=26 or "Posicion"=36 or "Posicion"=46) group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
-        cpos_query = 'select "EstICDAS" as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_superficie as b on a.id=b."Paciente_id" group by "EstICDAS" order by array_position(array[%s::char, %s::char, %s::char, %s::char], "EstICDAS"::char);'
-        with connection.cursor() as cursor:
-            #Para CPOD
-            cursor.execute(cpod_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
-            cpod = dictfetchall(cursor)
-            context['cpod'] = cpod
-            # Para ceod
-            cursor.execute(cpod_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
-            cpod = dictfetchall(cursor)
-            context['ceod'] = cpod
-            # Para CPOM
-            cursor.execute(cpod_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
-            cpod = dictfetchall(cursor)
-            context['cpom'] = cpod
-            # Para CPOS
-            cursor.execute(cpos_query, ['Cariado', 'Perdido', 'Obturado', 'Sano'])
-            cpod = dictfetchall(cursor)
-            context['cpos'] = cpod
-    print(context)
+        context = consultar_indices('"EstICDAS"', '1999-01-01', datetime.date.today())
+
     return render(request, 'reporte_frec_grupales.html', context)
 
-def dictfetchall(cursor):
+def consultar_indices(criterio, fecha_inicial, fecha_final):
+    context = {}
+    indices = ['cpod', 'ceod', 'cpom', 'cpos']
+    cpod_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion"<47 and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+    ceod_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion">51 and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+    cpom_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where ("Posicion"=16 or "Posicion"=26 or "Posicion"=36 or "Posicion"=46) and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+    cpos_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_superficie as b on a.id=b."Paciente_id" where (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+    queries = [cpod_query, ceod_query, cpom_query, cpos_query]
+
+    with connection.cursor() as cursor:
+        i = 0
+        for ind in indices:
+            cursor.execute(queries[i], [fecha_inicial, fecha_final, 'Cariado', 'Perdido', 'Obturado', 'Sano'])
+            context[ind] = procesar_resultado_frecuencias(cursor)
+            i = i + 1
+
+    return context
+
+
+def procesar_resultado_frecuencias(cursor):
     "Return all rows from a cursor as a dict"
     columns = [col[0] for col in cursor.description]
-    return [
+    query_dict = [
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
+
+    total_pacientes = Paciente.objects.count()
+    for q in query_dict:
+        q['frecuencia'] = q.get('cantidad')/total_pacientes
+
+    return query_dict
+
+#Finaliza reporte de frecuencias grupales
 
 def reporte_comp_diagnostico(request):
     conexiones = User.objects.all()
