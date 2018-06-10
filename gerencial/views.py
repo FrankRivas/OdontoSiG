@@ -121,14 +121,58 @@ def procesar_resultado_frecuencias(cursor):
 
 #Finaliza reporte de frecuencias grupales
 
+
+#Inicia reporte de comparativo de diagnostico (prevalencias)
 def reporte_comp_diagnostico(request):
     conexiones = User.objects.all()
 
-    context = {
-        'conexiones': conexiones,
-    }
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_desde')
+        fecha_final = request.POST.get('fecha_hasta')
+        criterio = request.POST.get('criterio')
+        cod_criterio = '"EstICDAS"'
+        if criterio == '1':
+            cod_criterio = '"EstOMS"'
+        context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
+    else:  # Desde el principio de los tiempos
+        context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     return render(request, 'reporte_comp_diagnostico.html', context)
+
+def consultar_prevalencias(criterio, fecha_inicial, fecha_final):
+    context = {}
+    indices = ['cpod', 'ceod', 'cpom']
+    cpod_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion"<47 and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+    ceod_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where "Posicion">51 and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+    cpom_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_pieza as b on a.id=b."Paciente_id" where ("Posicion"=16 or "Posicion"=26 or "Posicion"=36 or "Posicion"=46) and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+
+    queries = [cpod_query, ceod_query, cpom_query]
+
+    with connection.cursor() as cursor:
+        i = 0
+        for ind in indices:
+            cursor.execute(queries[i], [fecha_inicial, fecha_final, 'Cariado', 'Perdido', 'Obturado', 'Sano'])
+            context[ind] = procesar_resultado_prevalencias(cursor)
+            i = i + 1
+
+    return context
+
+def procesar_resultado_prevalencias(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    query_dict = [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+    total = 0
+    for q in query_dict:
+        total = total + q.get('cantidad')
+
+    for q in query_dict:
+        q['frecuencia'] = q.get('cantidad')/total
+
+    return query_dict
+#Finaliza reporte de comparativo de diagnostico (prevalencias)
 
 def reporte_est_superficie(request):
     conexiones = User.objects.all()
