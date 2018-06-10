@@ -124,7 +124,6 @@ def procesar_resultado_frecuencias(cursor):
 
 #Inicia reporte de comparativo de diagnostico (prevalencias)
 def reporte_comp_diagnostico(request):
-    conexiones = User.objects.all()
 
     if request.method == 'POST':
         fecha_inicio = request.POST.get('fecha_desde')
@@ -174,14 +173,57 @@ def procesar_resultado_prevalencias(cursor):
     return query_dict
 #Finaliza reporte de comparativo de diagnostico (prevalencias)
 
+#Inicia reporte de estado de superficies
 def reporte_est_superficie(request):
-    conexiones = User.objects.all()
 
-    context = {
-        'conexiones': conexiones,
-    }
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_desde')
+        fecha_final = request.POST.get('fecha_hasta')
+        criterio = request.POST.get('criterio')
+        cod_criterio = '"EstICDAS"'
+        if criterio == '1':
+            cod_criterio = '"EstOMS"'
+        context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
+    else:  # Desde el principio de los tiempos
+        context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     return render(request, 'reporte_est_superficie.html', context)
+
+
+def consultar_est_superficies(criterio, fecha_inicial, fecha_final):
+    context = {}
+    indices = ['cpod', 'ceod', 'cpom']
+    super_cpod_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_superficie as b on a.id=b."Paciente_id" where "Posicion"<47 and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+    super_ceod_query = 'select ' + criterio + ' as Estado, count(*) as Cantidad from gerencial_paciente as a join gerencial_superficie as b on a.id=b."Paciente_id" where "Posicion">51 and (a."FechaConsul" > %s and a."FechaConsul" < %s) group by ' + criterio + ' order by array_position(array[%s::char, %s::char, %s::char, %s::char], ' + criterio + '::char);'
+
+    queries = [super_cpod_query, super_ceod_query]
+
+    with connection.cursor() as cursor:
+        i = 0
+        for ind in indices:
+            cursor.execute(queries[i], [fecha_inicial, fecha_final, 'Cariado', 'Perdido', 'Obturado', 'Sano'])
+            context[ind] = procesar_resultado_superficies(cursor)
+            i = i + 1
+
+    return context
+
+def procesar_resultado_superficies(cursor):
+    "Return all rows from a cursor as a dict"
+    columns = [col[0] for col in cursor.description]
+    query_dict = [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
+    total = 0
+    for q in query_dict:
+        total = total + q.get('cantidad')
+
+    for q in query_dict:
+        q['frecuencia'] = q.get('cantidad')/total
+
+    return query_dict
+
+#Finaliza reporte de estado de superficies
 
 def reporte_clas_severidad(request):
     conexiones = User.objects.all()
@@ -201,14 +243,56 @@ def reporte_clas_pacientes(request):
 
     return render(request, 'reporte_clas_pacientes.html', context)
 
+#Inicia reporte de necesidades de tratamiento
+
 def reporte_nec_trat_svariable(request):
-    conexiones = User.objects.all()
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_desde')
+        fecha_final = request.POST.get('fecha_hasta')
+        criterio = request.POST.get('criterio')
+        grupo_etario = request.POST.get('etario')
+        cod_criterio = '"EstICDAS"'
+        if criterio == '1':
+            cod_criterio = '"EstOMS"'
 
-    context = {
-        'conexiones': conexiones,
-    }
+        edades = rango_edades(grupo_etario)
 
+        context = consultar_tratamientos(cod_criterio, fecha_inicio, fecha_final, edades)
+
+    else:  # Desde el principio de los tiempos
+        context = consultar_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
+
+    print(context)
     return render(request, 'reporte_nec_trat_var.html', context)
+
+def rango_edades(etario):
+    rango = []
+    if etario == '0':
+        rango = [2, 5]
+    elif etario == '1':
+        rango = [6,12]
+    elif etario == '2':
+        rango = [13, 17]
+    else:
+        rango = [18, 99]
+
+    return rango
+
+def consultar_tratamientos(criterio, fecha_inicial, fecha_final, edades):
+    context = {}
+    tratam_query = 'drop table if exists tratamientos;create temp table tratamientos as select "NomTratam", "Sexo", "Residencia" from (select "CodSuper", '+criterio+', "Tratamiento_id", "Residencia", "Sexo" from (select * from gerencial_superficie where '+criterio+'=%s) as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul" > %s and "FechaConsul" < %s) and ("Edad">%s and "Edad"<%s)) as a join gerencial_tratamiento as b on a."Tratamiento_id"=b.id;select "NomTratam", count(case when "Sexo"=%s then 1 else null end) as Masculinos, count(case when "Sexo"=%s then 1 else null end) as Femeninos, count(case when "Residencia"=%s then 1 else null end) as Urbano, count(case when "Residencia"=%s then 1 else null end) as Rural from tratamientos group by "NomTratam";'
+    with connection.cursor() as cursor:
+        cursor.execute(tratam_query, ['Cariado', fecha_inicial, fecha_final, edades[0], edades[1], 'M', 'F', 'U', 'R'])
+        columns = [col[0] for col in cursor.description]
+        query_dict = [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+
+        context['tratamientos'] = query_dict
+    return context
+
+#Finaliza reporte de necesidades de tratamiento
 
 
 def reporte_pac_atendidos(request):
