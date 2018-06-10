@@ -141,6 +141,61 @@ def reporte_clas_pacientes(request):
     }
 
     return render(request, 'reporte_clas_pacientes.html', context)
+
+def reporte_nec_trat_svariable(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_nec_trat_var.html', context)
+
+
+def reporte_pac_atendidos(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_pac_atendidos.html', context)
+
+def reporte_frecuencias(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_frecuencias.html', context)
+
+def reporte_prevalencias(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_prevalencias.html', context)
+
+def reporte_nec_tratamiento(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_nec_tratamiento.html', context)
+
+def reporte_severidad(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_severidad.html', context)
 #Highchars
 def pruebas(self):
     return render(self, 'pruebas.html')
