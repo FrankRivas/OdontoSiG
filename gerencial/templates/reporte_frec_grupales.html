@@ -3,7 +3,7 @@
 {% block content %}
 
         <div class="">
-            <h5 style="text-align: center">Seleccione el Periodo</h5>
+            <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
         <form method="post" action="">
             {% csrf_token %}
@@ -28,9 +28,13 @@
                 </div>
                 <div class="col s12 m6">
                     <div class="row">
-                        <div class="input-field col s12 fecha_hasta" id="fecha_hasta">
-                            <i class="material-icons prefix">content_paste</i><input autocomplete="off"  id="criterio" name="criterio" type="text" >
-                            <label class="active" for="fecha_hasta">Criterio</label>
+                        <div class="input-field col s12 criterios" id="criterios">
+                            <i class="material-icons prefix">content_paste</i>
+                            <select name = "criterio" id="criterio" >
+                    <option value="0">ICDAS</option>
+                    <option value="1">OMS</option>
+
+</select>
                             <div class="help-block">Criterio: ICDAS u OMS</div>
                         </div>
                     </div>

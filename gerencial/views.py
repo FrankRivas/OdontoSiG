@@ -69,7 +69,7 @@ def reporte_conexion(request):
 
     return render(request, 'reporte_conexiones.html', context)
 
-def reporte_tactico2(request):
+def reporte_frec_grupales(request):
     if request.method=='POST':
         print('Hay haces los filtros')
     else: #Desde el principio de los tiempos
@@ -96,7 +96,7 @@ def reporte_tactico2(request):
             cpod = dictfetchall(cursor)
             context['cpos'] = cpod
     print(context)
-    return render(request, 'reporte_tactico2.html', context)
+    return render(request, 'reporte_frec_grupales.html', context)
 
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
@@ -106,6 +106,41 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
+def reporte_comp_diagnostico(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_comp_diagnostico.html', context)
+
+def reporte_est_superficie(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_est_superficie.html', context)
+
+def reporte_clas_severidad(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_clas_severidad.html', context)
+
+def reporte_clas_pacientes(request):
+    conexiones = User.objects.all()
+
+    context = {
+        'conexiones': conexiones,
+    }
+
+    return render(request, 'reporte_clas_pacientes.html', context)
 #Highchars
 def pruebas(self):
     return render(self, 'pruebas.html')
