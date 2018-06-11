@@ -26,18 +26,15 @@
                         </div>
                     </div>
                 </div>
-                <div class="col s12 m7">
+                <div class="col s12 m6">
                     <div class="row">
                         <div class="input-field col s12 criterios" id="criterios">
                             <i class="material-icons prefix">content_paste</i>
                             <select name = "criterio" id="criterio" >
-                    <option value="0">CPOD</option>
-                    <option value="1">ceod</option>
-                                <option value="2">CPOM</option>
-                                <option value="3">CPOS</option>
-
-</select>
-                            <div class="help-block">Criterio</div>
+                                <option value="0">ICDAS</option>
+                                <option value="1">OMS</option>
+                            </select>
+                            <div class="help-block">Criterio: ICDAS u OMS</div>
                         </div>
                     </div>
                 </div>
@@ -52,6 +49,100 @@
                 </div>
             </div>
         </form>
+
+
+        <h4><center>Tablas de Frecuencia Grupales</center></h4>
+
+        <div class="row" id="content">
+            <div class="col s5">
+                <h6>CPOD</h6>
+                <table id="tabla_cpod" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
+                    <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for fila in cpod %}
+                        <tr>
+                            <td>{{ fila.estado }}</td>
+                            <td>{{ fila.cantidad }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col s5">
+                <h6>ceod</h6>
+                <table id="tabla_ceod" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
+                    <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for fila in ceod %}
+                        <tr>
+                            <td>{{ fila.estado }}</td>
+                            <td>{{ fila.cantidad }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col s5">
+                <h6>CPOM</h6>
+                <table id="tabla_cpom" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
+                    <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for fila in cpom %}
+                        <tr>
+                            <td>{{ fila.estado }}</td>
+                            <td>{{ fila.cantidad }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+           <div class="col s5">
+                <h6>CPOS</h6>
+                <table id="tabla_cpos" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
+                    <thead>
+                    <tr>
+                        <th>Estado</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for fila in cpos %}
+                        <tr>
+                            <td>{{ fila.estado }}</td>
+                            <td>{{ fila.cantidad }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
 
 
 {% block js %}
