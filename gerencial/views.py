@@ -223,25 +223,101 @@ def procesar_resultado_superficies(cursor):
 
     return query_dict
 
-#Finaliza reporte de estado de superficies
+#Inicia reporte de severidad de caries
 
 def reporte_clas_severidad(request):
-    conexiones = User.objects.all()
 
-    context = {
-        'conexiones': conexiones,
-    }
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_desde')
+        fecha_final = request.POST.get('fecha_hasta')
+        criterio = request.POST.get('criterio')
+
+        cod_criterio = '"EstICDAS"'
+        if criterio == '1':
+            cod_criterio = '"EstOMS"'
+
+
+        context = consultar_severidades(cod_criterio, fecha_inicio, fecha_final)
+
+    else:  # Desde el principio de los tiempos
+        context = consultar_severidades('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     return render(request, 'reporte_clas_severidad.html', context)
 
+def consultar_severidades(criterio, fecha_inicial, fecha_final):
+    context = {}
+    sever_query = 'select a."severidad", count(*) as Afectados from (select (case when "CodCar"%%10=0 then %s when ("CodCar"%%10>=1 and "CodCar"%%10<=3) then %s when ("CodCar"%%10>=4 and "CodCar"%%10<=6) then %s else %s end) as Severidad from gerencial_superficie as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul">%s and "FechaConsul"<%s)) as a group by a."severidad";'
+    with connection.cursor() as cursor:
+        cursor.execute(sever_query, ['Sano', 'Esmalte', 'Dentina', 'Perdido', fecha_inicial, fecha_final])
+        columns = [col[0] for col in cursor.description]
+        query_dict = [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+        context['severidades'] = query_dict
+
+    return context
+
+
+#Finaliza reporte de severidad de caries
+
+#Inicia reporte de clasificacion de pacientes
 def reporte_clas_pacientes(request):
-    conexiones = User.objects.all()
 
-    context = {
-        'conexiones': conexiones,
-    }
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_desde')
+        fecha_final = request.POST.get('fecha_hasta')
+        reporte = request.POST.get('reporte')
 
+        context = consultar_pacientes(reporte, fecha_inicio, fecha_final)
+    else:  # Desde el principio de los tiempos
+        context = consultar_pacientes('0', '1999-01-01', datetime.date.today())
+
+    print(context['reporte'])
     return render(request, 'reporte_clas_pacientes.html', context)
+
+def consultar_pacientes(reporte, fecha_inicio, fecha_final):
+    context = {}
+
+    rep_0 = 'select "evaluaciones", count(case when ("Edad">1 and "Edad"<6) then 1 else null end) as "2-5 años", count(case when ("Edad">5 and "Edad"<13) then 1 else null end) as "6-12 años", count(case when ("Edad">12 and "Edad"<18) then 1 else null end) as "13-17 años", count(case when "Edad">=18 then 1 else null end) as "18-mas años" from (select a.id, "Edad", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones from gerencial_paciente as a join gerencial_historialodonto as b on a.id=b."Paciente_id" where ("FechaConsul">=%s and "FechaConsul"<=%s)) as a group by "evaluaciones"';
+    param_0 = [',', fecha_inicio, fecha_final]
+
+    rep_1 = 'drop table if exists evalhab;create temp table evalhab as select "Paciente_id", "evaluaciones", regexp_split_to_table("HabitosBucal", E%s) as Habitos from (select "Paciente_id", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones, "HabitosBucal" from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where (b."FechaConsul">=%s and b."FechaConsul"<=%s)) as a;select "evaluaciones", count(case when "habitos"=%s then 1 else null end) as Respirador, count(case when "habitos"=%s then 1 else null end) as Onicofagia, count(case when "habitos"=%s then 1 else null end) as Burxismo, count(case when "habitos"=%s then 1 else null end) as Otros from evalhab group by "evaluaciones";'
+    param_1 = [',', ',', fecha_inicio, fecha_final, 'respirador', 'onicofagia', 'burxismo', 'otros']
+
+    rep_2 = 'select "Sexo", count(case when ("Edad">1 and "Edad"<6) then 1 else null end) as "2-5 años", count(case when ("Edad">5 and "Edad"<13) then 1 else null end) as "6-12 años", count(case when ("Edad">12 and "Edad"<18) then 1 else null end) as "13-17 años", count(case when "Edad">=18 then 1 else null end) as "18-mas años" from gerencial_paciente where ("FechaConsul">%s and "FechaConsul"<%s) group by "Sexo";'
+    param_2 = [fecha_inicio, fecha_final]
+
+    rep_3 = 'select "habitos", count(case when "FrecCepilla"=1 then 1 else null end) as "1 vez", count(case when "FrecCepilla"=2 then 1 else null end) as "2 veces", count(case when "FrecCepilla"=3 then 1 else null end) as "3 veces", count(case when "FrecCepilla">3 then 1 else null end) as "4 o mas veces" from (select "FrecCepilla", regexp_split_to_table("HabitosBucal", E%s) as Habitos from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul">%s and "FechaConsul"<%s)) as a group by "habitos";'
+    param_3 = [',', fecha_inicio, fecha_final]
+
+    reportes = [rep_0, rep_1, rep_2, rep_3]
+    parametros = [param_0, param_1, param_2, param_3]
+
+    with connection.cursor() as cursor:
+        query = reportes[3]
+        params = parametros[3]
+
+        if reporte == '0':
+            query = reportes[0]
+            params = parametros[0]
+        elif reporte == '1':
+            query = reportes[1]
+            params = parametros[1]
+        elif reporte == '2':
+            query = reportes[2]
+            params = parametros[2]
+        else:
+            query = reportes[3]
+            params = parametros[3]
+
+        cursor.execute(query, params)
+        columns = [col[0] for col in cursor.description]
+
+        query_dict = cursor.fetchall()
+        context['reporte'] = query_dict
+        context['cols'] = columns
+    return context
 
 #Inicia reporte de necesidades de tratamiento
 
@@ -262,7 +338,6 @@ def reporte_nec_trat_svariable(request):
     else:  # Desde el principio de los tiempos
         context = consultar_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
 
-    print(context)
     return render(request, 'reporte_nec_trat_var.html', context)
 
 def rango_edades(etario):
