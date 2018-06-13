@@ -21,6 +21,6 @@ urlpatterns = [
     url(r'^necesidades_tratamiento', reporte_nec_tratamiento, name='necesidades_tratamiento'),
     url(r'^severidad', reporte_severidad, name='severidad'),
 
-    url('^pruebas/$', pruebas, name='prueba'),
-    url('^pruebas/ajax/prueba_creacion/$', prueba_creacion, name='prueba_creacion'),
+    url('^pruebas/$', pruebas, name='Pruebas'),
+    url('^pruebas/ajax/PruebaCreacion/$', prueba_creacion, name='PruebaCreacion'),
 ]

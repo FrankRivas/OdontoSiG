@@ -7,6 +7,13 @@ function crear() {
         success: function(data) {
             var fn = Function(data.render.dataLabelFunction);
             data.chart.plotOptions.pie.dataLabels = {"formatter": fn};
+            Highcharts.setOptions({
+                lang: {
+                    downloadPDF: 'Descargar como PDF',
+                    downloadPNG: 'Descargar como PNG',
+                    downloadJPEG: 'Descargar como JPEG',
+                }
+            });
             Highcharts.chart("container", data.chart, function (chart) {
                 chart.renderer.image(data.render.image, 30, 25, 130, 130).add();
                 chart.renderer.text("UNIVERSIDAD DE EL SALVADOR", 200, 60).css({

@@ -625,7 +625,12 @@ def prueba_creacion(request):
         #Mantiene el formato de html en la exportación
         "exporting":{
             "enabled":"true",
-            "allowHTML":"true"
+            "allowHTML":"true",
+            "buttons": {
+                "contextButton": {
+                    "menuItems": [ "downloadPNG", "downloadPDF", "downloadJPEG"]
+                }
+            }
         },
         "plotOptions":{
             #Tamaño del diámetro del gráfico
@@ -647,7 +652,7 @@ def prueba_creacion(request):
         #Información en base a la que se construye el gráfico
         "series": [{
             "showInLegend":"true",
-            "name":"Parámetro",
+            "name": "Parámetro de dato",
             "data":[
                 {"name":"Primero","y":25.5},
                 {"name":"Segundo","y":25.5},
