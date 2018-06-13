@@ -11,17 +11,33 @@ class Paciente(models.Model):
 
 class Pieza(models.Model):
     Posicion = models.IntegerField(null=False)
-    CodOMS = models.IntegerField()
-    CodICDAS = models.IntegerField()
+    EstOMS = models.CharField(max_length=50)
+    EstICDAS = models.CharField(max_length=50)
     Paciente = models.ForeignKey(Paciente)
+
+class Carie(models.Model):
+    Descripcion = models.CharField(max_length=255, null=False)
+
+    def __str__(self):
+        return self.Descripcion
+
+class Tratamiento(models.Model):
+    Caries = models.ForeignKey(Carie)
+    NomTratam = models.CharField(max_length=255, null=False)
+    CodDental = models.IntegerField(null=False)
+
+    def __str__(self):
+        return self.NomTratam
 
 class Superficie(models.Model):
     Paciente = models.ForeignKey(Paciente)
+    Tratamiento = models.ForeignKey(Tratamiento)
     Posicion = models.IntegerField(null=False)
     CodSuper = models.IntegerField(null=False)
     NomSuper = models.CharField(max_length=255, null=False)
-    CodICDAS = models.IntegerField()
-    CodOMS = models.IntegerField()
+    EstICDAS = models.CharField(max_length=50)
+    EstOMS = models.CharField(max_length=50)
+    CodCar = models.IntegerField()
 
 class HistorialOdonto(models.Model):
     Paciente = models.ForeignKey(Paciente)
@@ -32,23 +48,10 @@ class HistorialOdonto(models.Model):
     def __str__(self):
         return self.EvalSistem
 
-class Carie(models.Model):
-    Descripcion = models.CharField(max_length=25, null=False)
 
-    def __str__(self):
-        return self.Descripcion
-
-class Tratamiento(models.Model):
-    Paciente = models.ForeignKey(Paciente)
-    Caries = models.ForeignKey(Carie)
-    NomTratam = models.CharField(max_length=255, null=False)
-    CodDental = models.IntegerField(null=False)
-
-    def __str__(self):
-        return self.NomTratam
 
 class Accion(models.Model):
-    NombreAccion = models.CharField(max_length=50, null=False)
+    NombreAccion = models.CharField(max_length=150, null=False)
     InfoControl = models.CharField(max_length=255, null=False)
 
     def __str__(self):
