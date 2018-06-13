@@ -84,7 +84,9 @@
         </div>
         </form>
 
-         <h4><center>Afectados por severidad de caries</center></h4>
+        <h4><center>Afectados por severidad de caries</center></h4>
+
+        <div id="container" style="height: 700px"></div>
 
         <div class="row">
             <div class="col s12">
@@ -107,59 +109,67 @@
                     </tbody>
                 </table>
             </div>
-
-
+        <script src="{% static 'gerencial/js/jquery-2.1.1.js' %}" ></script>
+        <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/highcharts.src.js' %}" ></script>
+        <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/exporting.js' %}" ></script>
+        <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/export-data.js' %}" ></script>
+        <script src="{% static 'gerencial/js/base64.js' %}"></script>
+        <script type="text/javascript">
+            var logo = "{% static 'gerencial/img/odonto_logo.png' %}";
+            to_data_url(logo, function(dataUrl) {
+                logo = dataUrl;
+            });
+            var severidad = "{{ severidades | safe }}";
+            severidad = severidad.split("'").join('"');
+            severidad = JSON.parse(severidad);
+            console.log(severidad);
+        </script>
+        <script src="{% static 'gerencial/js/reporte_severidad.js' %}"></script>
 {% block js %}
          <script type="text/javascript">
+         $(document).ready(function() {
             $('input[name="fecha_desde"]').mask('00/00/0000');
             $('input[name="fecha_hasta"]').mask('00/00/0000');
-        </script>
-        <script type="text/javascript">
+
             $('input[name="fecha_desde"]').dblclick(function() {
                 $('input[name="fecha_desde"]').datepicker('show');
             });
             $('input[name="fecha_desde"]').click(function() {
                 $('input[name="fecha_desde"]').datepicker('hide');
             });
-        </script>
-        <script type="text/javascript">
+
             $('input[name="fecha_desde"]').datepicker({
                 format: "dd/mm/yyyy",
                 todayBtn: "linked",
                 maxViewMode: 3,
                 autoclose: true,
                 language: "es",
-                daysOfWeekHighlighted: "0",
                 clearBtn: true,
                 todayHighlight: true,
                 orientation: "bottom auto",
                 container: "div.fecha_desde"
             });
-        </script>
 
-        <script type="text/javascript">
             $('input[name="fecha_hasta"]').dblclick(function() {
                 $('input[name="fecha_hasta"]').datepicker('show');
             });
             $('input[name="fecha_hasta"]').click(function() {
                 $('input[name="fecha_hasta"]').datepicker('hide');
             });
-        </script>
-        <script type="text/javascript">
+
             $('input[name="fecha_hasta"]').datepicker({
                 format: "dd/mm/yyyy",
                 todayBtn: "linked",
                 maxViewMode: 3,
                 autoclose: true,
                 language: "es",
-                daysOfWeekHighlighted: "0",
                 clearBtn: true,
                 todayHighlight: true,
                 orientation: "bottom auto",
                 container: "div.fecha_hasta"
             });
+         });
         </script>
-
 {%endblock%}
 
 {%endblock%}

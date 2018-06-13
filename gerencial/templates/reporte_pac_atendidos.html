@@ -77,30 +77,13 @@
             </div>
         </div>
 
-
         <script src="{% static 'gerencial/js/jquery-2.1.1.js' %}" ></script>
         <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/highcharts.src.js' %}" ></script>
         <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/exporting.js' %}" ></script>
         <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/export-data.js' %}" ></script>
+        <script src="{% static 'gerencial/js/base64.js' %}"></script>
         <script type="text/javascript">
-            function toDataURL(src, callback) {
-                var xhttp = new XMLHttpRequest();
-
-                xhttp.onload = function() {
-                    var fileReader = new FileReader();
-                    fileReader.onloadend = function() {
-                        callback(fileReader.result);
-                    }
-                    fileReader.readAsDataURL(xhttp.response);
-                };
-
-                xhttp.responseType = 'blob';
-                xhttp.open('GET', src, true);
-                xhttp.send();
-            }
-
             var logo = "{% static 'gerencial/img/odonto_logo.png' %}";
-
             var columnas = {{ cols|safe }};
             var filas = "{{ reporte|safe }}";
             filas = filas.split("(").join('[');
@@ -108,7 +91,7 @@
             filas = eval(filas);
             console.log(columnas);
             console.log(filas);
-            toDataURL(logo, function(toDataUrl) {
+            to_data_url(logo, function(toDataUrl) {
                 logo = toDataUrl;
             })
         </script>

@@ -604,7 +604,7 @@ def estrategico_severidades(criterio, fecha_inicial, fecha_final, edades, sexo, 
 #Finaliza reporte estrategico de severidad
 
 
-#Highchars
+#Hightchars
 def pruebas(self):
     return render(self, 'pruebas.html')
 
