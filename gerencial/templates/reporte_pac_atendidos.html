@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-
         <div class="">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
@@ -30,12 +29,11 @@
                     <div class="row">
                         <div class="input-field col s12 criterios" id="criterios">
                             <i class="material-icons prefix">content_paste</i>
-                            <select name = "reporte" id="reporte" >
-                    <option value="0">Genero</option>
-                    <option value="1">Grupo Etario</option>
-                                <option value="2">Edades</option>
-
-</select>
+                                <select name = "reporte" id="reporte" >
+                                    <option value="0">Genero</option>
+                                    <option value="1">Grupo Etario</option>
+                                    <option value="2">Edades</option>
+                                </select>
                             <div class="help-block">Criterio</div>
                         </div>
                     </div>
@@ -53,10 +51,10 @@
         </form>
 
         <h4><center>Comparativas pacientes</center></h4>
-
+        <div id="container" class="col s12" style="height: 700px"></div>
         <div class="row">
             <div class="col s12">
-                <table id="tabla_tratam" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
+                <table id="planilla_table" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
                     <thead>
                     <tr>
                         {% for fila in cols %}
@@ -77,49 +75,74 @@
                     </tbody>
                 </table>
             </div>
+        </div>
 
 
+        <script src="{% static 'gerencial/js/jquery-2.1.1.js' %}" ></script>
+        <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/highcharts.src.js' %}" ></script>
+        <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/exporting.js' %}" ></script>
+        <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/export-data.js' %}" ></script>
+        <script type="text/javascript">
+            function toDataURL(src, callback) {
+                var xhttp = new XMLHttpRequest();
 
+                xhttp.onload = function() {
+                    var fileReader = new FileReader();
+                    fileReader.onloadend = function() {
+                        callback(fileReader.result);
+                    }
+                    fileReader.readAsDataURL(xhttp.response);
+                };
 
+                xhttp.responseType = 'blob';
+                xhttp.open('GET', src, true);
+                xhttp.send();
+            }
 
+            var logo = "{% static 'gerencial/img/odonto_logo.png' %}";
+
+            var columnas = {{ cols|safe }};
+            var filas = "{{ reporte|safe }}";
+            filas = filas.split("(").join('[');
+            filas = filas.split(")").join(']');
+            filas = eval(filas);
+            console.log(columnas);
+            console.log(filas);
+            toDataURL(logo, function(toDataUrl) {
+                logo = toDataUrl;
+            })
+        </script>
+        <script type="text/javascript" src="{% static 'gerencial/js/reporte_pac_atendidos.js' %}" ></script>
 {% block js %}
-         <script type="text/javascript">
-            $('input[name="fecha_desde"]').mask('00/00/0000');
-            $('input[name="fecha_hasta"]').mask('00/00/0000');
-        </script>
-        <script type="text/javascript">
-            $('input[name="fecha_desde"]').dblclick(function() {
-                $('input[name="fecha_desde"]').datepicker('show');
-            });
+    <script type="text/javascript">
+        $(document).ready(function (){
+            $("input[name='fecha_desde']").dblclick(function() {
+                    $("input[name='fecha_desde']").datepicker("show");
+                });
             $('input[name="fecha_desde"]').click(function() {
-                $('input[name="fecha_desde"]').datepicker('hide');
+                    $("input[name='fecha_desde']").datepicker("hide");
             });
-        </script>
-        <script type="text/javascript">
-            $('input[name="fecha_desde"]').datepicker({
-                format: "dd/mm/yyyy",
-                todayBtn: "linked",
-                maxViewMode: 3,
-                autoclose: true,
-                language: "es",
-                daysOfWeekHighlighted: "0",
-                clearBtn: true,
-                todayHighlight: true,
-                orientation: "bottom auto",
-                container: "div.fecha_desde"
+            $("input[name='fecha_desde']").datepicker({
+                    format: "dd/mm/yyyy",
+                    todayBtn: "linked",
+                    maxViewMode: 3,
+                    autoclose: true,
+                    language: "es",
+                    daysOfWeekHighlighted: "0",
+                    clearBtn: true,
+                    todayHighlight: true,
+                    orientation: "bottom auto",
+                    container: "div.fecha_desde"
             });
-        </script>
+            $("input[name='fecha_desde']").mask("00/00/0000");
 
-        <script type="text/javascript">
-            $('input[name="fecha_hasta"]').dblclick(function() {
-                $('input[name="fecha_hasta"]').datepicker('show');
+            $("input[name='fecha_hasta']").dblclick(function() {
+                $('input[name="fecha_hasta"]').datepicker("show");
             });
-            $('input[name="fecha_hasta"]').click(function() {
-                $('input[name="fecha_hasta"]').datepicker('hide');
+            $("input[name='fecha_hasta']").click(function() {
+                $("input[name='fecha_hasta']").datepicker("hide");
             });
-        </script>
-        <script type="text/javascript">
-            $('input[name="fecha_hasta"]').datepicker({
+            $("input[name='fecha_hasta']").datepicker({
                 format: "dd/mm/yyyy",
                 todayBtn: "linked",
                 maxViewMode: 3,
@@ -131,8 +154,8 @@
                 orientation: "bottom auto",
                 container: "div.fecha_hasta"
             });
-        </script>
-
-{%endblock%}
-
+            $("input[name='fecha_hasta']").mask("00/00/0000");
+        });
+    </script>
+{% endblock %}
 {%endblock%}
