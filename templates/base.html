@@ -63,22 +63,23 @@
                         <li>
                             <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Reportes Estrategicos</div>
 
-                                <div class="collapsible-body"><span><a href="#"><center>Reporte 1</center></a></span></div>
-
-
-                                <div class="collapsible-body"><span><a href="#"><center>Reporte 2</center></a></span></div>
-
+                                <div class="collapsible-body"><span><a href="{% url 'pacientes_atendidos' %}"><center>Pacientes Atendidos</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'frecuencias' %}"><center>Frecuencias</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'prevalencias' %}"><center>Prevalencias</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'necesidades_tratamiento' %}"><center>Necesidades de Tratamiento</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'severidad' %}"><center>Severidad</center></a></span></div>
                         </li>
                         {% elif group == 'Tactico'%}
                         <li><div class="divider"></div></li>
                         <li>
                             <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Reportes Tacticos</div>
 
-                                <div class="collapsible-body"><span><a href="#"><center>Reporte 1</center></a></span></div>
-
-
-                                <div class="collapsible-body"><span><a href="#"><center>Reporte 2</center></a></span></div>
-
+                                <div class="collapsible-body"><span><a href="{% url 'frecuencias_grupales' %}"><center>Frecuencias Grupales</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'prevalencia_piezas' %}"><center>Prevalencia de Piezas</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'estado_superficie' %}"><center>Estados de Superficie</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'clasificacion_severidad' %}"><center>Clasificacion de Severidad</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'clasificacion_pacientes' %}"><center>Clasificacion de Pacientes</center></a></span></div>
+                                <div class="collapsible-body"><span><a href="{% url 'necesidad_segun_variable' %}"><center>Necesidades por Variable</center></a></span></div>
                         </li>
         {%elif group == 'Administrador'%}
                         <li><div class="divider"></div></li>

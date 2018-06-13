@@ -51,10 +51,15 @@ def reporte_bitacora(request):
         acciones = acciones.filter(FechaAccion__lte=b[6:] + "-" + b[3:5] + "-" + b[:2])
 
     #acciones = Bitacora.objects.all()
+    img = "static/gerencial/img/encabezado.png"
+    with open(img, 'rb') as f:
+        contents = f.read()
+        base = base64.b64encode(contents)
+        image = "data:image/png;base64," + base.decode('utf-8')
 
     context = {
         'acciones': acciones,
-
+        'image':image,
     }
 
     return render(request, 'reporte_bitacora.html', context)
@@ -62,9 +67,14 @@ def reporte_bitacora(request):
 
 def reporte_conexion(request):
     conexiones = User.objects.all()
-
+    img = "static/gerencial/img/encabezado.png"
+    with open(img, 'rb') as f:
+        contents = f.read()
+        base = base64.b64encode(contents)
+        image = "data:image/png;base64," + base.decode('utf-8')
     context = {
         'conexiones': conexiones,
+        'image' : image,
     }
 
     return render(request, 'reporte_conexiones.html', context)
