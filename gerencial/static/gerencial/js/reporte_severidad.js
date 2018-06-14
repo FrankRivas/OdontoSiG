@@ -1,9 +1,10 @@
+
 var datos = [];
 
-for(var i = 0; i < filas.length; i++) {
+for(var i = 0; i < severidad.length; i++) {
     datos.push({
-        name: filas[i][0],
-        y: filas[i][1]
+        name: severidad[i].severidad,
+        y: severidad[i].afectados
     });
 }
 
@@ -14,8 +15,9 @@ Highcharts.setOptions({
         downloadJPEG: "Descargar en formato JPEG"
     }
 });
-Highcharts.chart("container",{
-        chart: {
+
+Highcharts.chart("container", {
+    chart: {
             //Tipo de gráfico y espacio de header
             type:"pie",
             spacingTop: 200
@@ -24,7 +26,7 @@ Highcharts.chart("container",{
         exporting:{
             enabled:true,
             allowHTML:true,
-            filename: "Informe_Pacientes_Atendidos",
+            filename: "Informe_Severidad_Caries",
             buttons: {
                 contextButton: {
                     menuItems: [ "downloadPNG", "downloadPDF", "downloadJPEG"]
@@ -57,7 +59,7 @@ Highcharts.chart("container",{
             name: "Parámetro de dato",
             data:datos
         }]
-},function (chart) {
+}, function(chart) {
     chart.renderer.image(logo, 30, 25, 130, 130).add();
     chart.renderer.text("UNIVERSIDAD DE EL SALVADOR", 200, 60).css({
         fontSize: "18px"
@@ -69,7 +71,7 @@ Highcharts.chart("container",{
         fontSize: "18px"
     }).add();
     chart.setTitle({text:"<div class='col s12'>" +
-        "<div class='offset-s4'><p class='center-align'>Informe de pacientes atendidos</p></div></div>"});
+        "<div class='offset-s4'><p class='center-align'>Informe de severidad de caries</p></div></div>"});
     chart.setSubtitle({text:"<div class='col s12'>" +
         "<div class='offset-s3'><p class='center-align'>Desde: " + " hasta: </p></div></div>"});
 });

@@ -1,11 +1,14 @@
+trata = JSON.parse(trata);
+console.log(trata);
 var datos = [];
 
-for(var i = 0; i < filas.length; i++) {
+for(var i = 0; i < trata.length; i++) {
     datos.push({
-        name: filas[i][0],
-        y: filas[i][1]
+        name: trata[i].NomTratam,
+        y: trata[i].Cantidad
     });
 }
+
 
 Highcharts.setOptions({
     lang: {
@@ -14,6 +17,7 @@ Highcharts.setOptions({
         downloadJPEG: "Descargar en formato JPEG"
     }
 });
+
 Highcharts.chart("container",{
         chart: {
             //Tipo de gráfico y espacio de header
@@ -24,7 +28,7 @@ Highcharts.chart("container",{
         exporting:{
             enabled:true,
             allowHTML:true,
-            filename: "Informe_Pacientes_Atendidos",
+            filename: "Informe_Necedidad_Tratamientos",
             buttons: {
                 contextButton: {
                     menuItems: [ "downloadPNG", "downloadPDF", "downloadJPEG"]
@@ -54,7 +58,7 @@ Highcharts.chart("container",{
         //Información en base a la que se construye el gráfico
         series: [{
             showInLegend:true,
-            name: "Parámetro de dato",
+            name: "Parámetro",
             data:datos
         }]
 },function (chart) {
@@ -69,7 +73,7 @@ Highcharts.chart("container",{
         fontSize: "18px"
     }).add();
     chart.setTitle({text:"<div class='col s12'>" +
-        "<div class='offset-s4'><p class='center-align'>Informe de pacientes atendidos</p></div></div>"});
+        "<div class='offset-s4'><p class='center-align'>Informe de necesidad de tratamientos</p></div></div>"});
     chart.setSubtitle({text:"<div class='col s12'>" +
         "<div class='offset-s3'><p class='center-align'>Desde: " + " hasta: </p></div></div>"});
 });
