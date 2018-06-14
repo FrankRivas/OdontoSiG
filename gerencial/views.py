@@ -21,6 +21,17 @@ from operator import itemgetter
 class Inicio(LoginRequiredMixin, TemplateView):
     template_name = "base.html"
 
+def image_to_base64(url):
+    # img = "static/gerencial/img/encabezado.png"
+    img = url
+
+    with open(img, 'rb') as f:
+        contents = f.read()
+        base = base64.b64encode(contents)
+        image = "data:image/png;base64," + base.decode('utf-8')
+
+    return image
+
 def reporte_bitacora(request):
     locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
     if request.method == 'POST':
@@ -91,8 +102,18 @@ def reporte_frec_grupales(request):
         if criterio == '1':
             cod_criterio = '"EstOMS"'
         context = consultar_indices(cod_criterio, fecha_inicio, fecha_final)
+
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio
+        }
+        context['parametros'] = parametros
+
     else: #Desde el principio de los tiempos
         context = consultar_indices('"EstICDAS"', '1999-01-01', datetime.date.today())
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_frec_grupales.html', context)
 
@@ -125,7 +146,7 @@ def procesar_resultado_frecuencias(cursor):
 
     total_pacientes = Paciente.objects.count()
     for q in query_dict:
-        q['frecuencia'] = q.get('cantidad')/total_pacientes
+        q['frecuencia'] = round(q.get('cantidad') / total_pacientes, 2)
 
     return query_dict
 
@@ -143,8 +164,18 @@ def reporte_comp_diagnostico(request):
         if criterio == '1':
             cod_criterio = '"EstOMS"'
         context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
+
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio
+        }
+        context['parametros'] = parametros
+
     else:  # Desde el principio de los tiempos
         context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_comp_diagnostico.html', context)
 
@@ -178,7 +209,7 @@ def procesar_resultado_prevalencias(cursor):
         total = total + q.get('cantidad')
 
     for q in query_dict:
-        q['frecuencia'] = q.get('cantidad')/total
+        q['frecuencia'] = round(q.get('cantidad')/total, 2)
 
     return query_dict
 #Finaliza reporte de comparativo de diagnostico (prevalencias)
@@ -194,8 +225,17 @@ def reporte_est_superficie(request):
         if criterio == '1':
             cod_criterio = '"EstOMS"'
         context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
+
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio
+        }
+        context['parametros'] = parametros
     else:  # Desde el principio de los tiempos
         context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_est_superficie.html', context)
 
@@ -229,7 +269,7 @@ def procesar_resultado_superficies(cursor):
         total = total + q.get('cantidad')
 
     for q in query_dict:
-        q['frecuencia'] = q.get('cantidad')/total
+        q['frecuencia'] = round(q.get('cantidad')/total, 2)
 
     return query_dict
 
@@ -248,9 +288,17 @@ def reporte_clas_severidad(request):
 
 
         context = consultar_severidades(cod_criterio, fecha_inicio, fecha_final)
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio
+        }
+        context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
         context = consultar_severidades('"EstICDAS"', '1999-01-01', datetime.date.today())
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_clas_severidad.html', context)
 
@@ -280,25 +328,33 @@ def reporte_clas_pacientes(request):
         reporte = request.POST.get('reporte')
 
         context = consultar_pacientes(reporte, fecha_inicio, fecha_final)
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'reporte': reporte
+        }
+        context['parametros'] = parametros
+
     else:  # Desde el principio de los tiempos
         context = consultar_pacientes('0', '1999-01-01', datetime.date.today())
 
-    print(context['reporte'])
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
     return render(request, 'reporte_clas_pacientes.html', context)
 
 def consultar_pacientes(reporte, fecha_inicio, fecha_final):
     context = {}
 
-    rep_0 = 'select "evaluaciones", count(case when ("Edad">1 and "Edad"<6) then 1 else null end) as "2-5 años", count(case when ("Edad">5 and "Edad"<13) then 1 else null end) as "6-12 años", count(case when ("Edad">12 and "Edad"<18) then 1 else null end) as "13-17 años", count(case when "Edad">=18 then 1 else null end) as "18-mas años" from (select a.id, "Edad", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones from gerencial_paciente as a join gerencial_historialodonto as b on a.id=b."Paciente_id" where ("FechaConsul">=%s and "FechaConsul"<=%s)) as a group by "evaluaciones"';
+    rep_0 = 'select "evaluaciones" as "Evaluaciones", count(case when ("Edad">1 and "Edad"<6) then 1 else null end) as "2-5 años", count(case when ("Edad">5 and "Edad"<13) then 1 else null end) as "6-12 años", count(case when ("Edad">12 and "Edad"<18) then 1 else null end) as "13-17 años", count(case when "Edad">=18 then 1 else null end) as "18-mas años" from (select a.id, "Edad", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones from gerencial_paciente as a join gerencial_historialodonto as b on a.id=b."Paciente_id" where ("FechaConsul">=%s and "FechaConsul"<=%s)) as a group by "evaluaciones"';
     param_0 = [',', fecha_inicio, fecha_final]
 
-    rep_1 = 'drop table if exists evalhab;create temp table evalhab as select "Paciente_id", "evaluaciones", regexp_split_to_table("HabitosBucal", E%s) as Habitos from (select "Paciente_id", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones, "HabitosBucal" from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where (b."FechaConsul">=%s and b."FechaConsul"<=%s)) as a;select "evaluaciones", count(case when "habitos"=%s then 1 else null end) as Respirador, count(case when "habitos"=%s then 1 else null end) as Onicofagia, count(case when "habitos"=%s then 1 else null end) as Burxismo, count(case when "habitos"=%s then 1 else null end) as Otros from evalhab group by "evaluaciones";'
+    rep_1 = 'drop table if exists evalhab;create temp table evalhab as select "Paciente_id", "evaluaciones", regexp_split_to_table("HabitosBucal", E%s) as Habitos from (select "Paciente_id", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones, "HabitosBucal" from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where (b."FechaConsul">=%s and b."FechaConsul"<=%s)) as a;select "evaluaciones" as "Evaluaciones", count(case when "habitos"=%s then 1 else null end) as "Respirador", count(case when "habitos"=%s then 1 else null end) as "Onicofagia", count(case when "habitos"=%s then 1 else null end) as "Burxismo", count(case when "habitos"=%s then 1 else null end) as "Otros" from evalhab group by "evaluaciones";'
     param_1 = [',', ',', fecha_inicio, fecha_final, 'respirador', 'onicofagia', 'burxismo', 'otros']
 
     rep_2 = 'select "Sexo", count(case when ("Edad">1 and "Edad"<6) then 1 else null end) as "2-5 años", count(case when ("Edad">5 and "Edad"<13) then 1 else null end) as "6-12 años", count(case when ("Edad">12 and "Edad"<18) then 1 else null end) as "13-17 años", count(case when "Edad">=18 then 1 else null end) as "18-mas años" from gerencial_paciente where ("FechaConsul">%s and "FechaConsul"<%s) group by "Sexo";'
     param_2 = [fecha_inicio, fecha_final]
 
-    rep_3 = 'select "habitos", count(case when "FrecCepilla"=1 then 1 else null end) as "1 vez", count(case when "FrecCepilla"=2 then 1 else null end) as "2 veces", count(case when "FrecCepilla"=3 then 1 else null end) as "3 veces", count(case when "FrecCepilla">3 then 1 else null end) as "4 o mas veces" from (select "FrecCepilla", regexp_split_to_table("HabitosBucal", E%s) as Habitos from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul">%s and "FechaConsul"<%s)) as a group by "habitos";'
+    rep_3 = 'select "habitos" as "Habitos", count(case when "FrecCepilla"=1 then 1 else null end) as "1 vez", count(case when "FrecCepilla"=2 then 1 else null end) as "2 veces", count(case when "FrecCepilla"=3 then 1 else null end) as "3 veces", count(case when "FrecCepilla">3 then 1 else null end) as "4 o mas veces" from (select "FrecCepilla", regexp_split_to_table("HabitosBucal", E%s) as Habitos from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul">%s and "FechaConsul"<%s)) as a group by "habitos";'
     param_3 = [',', fecha_inicio, fecha_final]
 
     reportes = [rep_0, rep_1, rep_2, rep_3]
@@ -345,8 +401,18 @@ def reporte_nec_trat_svariable(request):
 
         context = consultar_tratamientos(cod_criterio, fecha_inicio, fecha_final, edades)
 
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio,
+            'etario': etario
+        }
+        context['parametros'] = parametros
+
     else:  # Desde el principio de los tiempos
         context = consultar_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_nec_trat_var.html', context)
 
@@ -387,10 +453,20 @@ def reporte_pac_atendidos(request):
         fecha_inicio = request.POST.get('fecha_desde')
         fecha_final = request.POST.get('fecha_hasta')
         reporte = request.POST.get('reporte')
-        print(reporte)
+
         context = pacientes_atendidos(reporte, fecha_inicio, fecha_final)
+
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'reporte': reporte
+        }
+        context['parametros'] = parametros
+
     else:  # Desde el principio de los tiempos
         context = pacientes_atendidos('0', '1999-01-01', datetime.date.today())
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_pac_atendidos.html', context)
 
@@ -429,8 +505,18 @@ def reporte_frecuencias(request):
         if criterio == '1':
             cod_criterio = '"EstOMS"'
         context = indices_estrategico(cod_criterio, fecha_inicio, fecha_final)
+
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio
+        }
+        context['parametros'] = parametros
+
     else:  # Desde el principio de los tiempos
         context = indices_estrategico('"EstICDAS"', '1999-01-01', datetime.date.today())
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_frecuencias.html', context)
 
@@ -476,9 +562,18 @@ def reporte_prevalencias(request):
         if criterio == '1':
             cod_criterio = '"EstOMS"'
         context = estrategico_prevalencias(cod_criterio, fecha_inicio, fecha_final)
+
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio
+        }
+        context['parametros'] = parametros
     else:  # Desde el principio de los tiempos
         context = estrategico_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
-    print(context)
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
     return render(request, 'reporte_prevalencias.html', context)
 
 def estrategico_prevalencias(criterio, fecha_inicial, fecha_final):
@@ -512,7 +607,7 @@ def est_procesar_prevalencias(cursor):
         total = total + q.get('cantidad')
 
     for q in query_dict:
-        q['frecuencia'] = q.get('cantidad') / total
+        q['frecuencia'] = round(q.get('cantidad') / total, 2)
 
     return query_dict
 
@@ -535,9 +630,19 @@ def reporte_nec_tratamiento(request):
 
         context = estrategico_tratamientos(cod_criterio, fecha_inicio, fecha_final, edades)
 
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio,
+            'etario': etario
+        }
+        context['parametros'] = parametros
+
     else:  # Desde el principio de los tiempos
         context = estrategico_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
-    print(context)
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
     return render(request, 'reporte_nec_tratamiento.html', context)
 
 def estrategico_tratamientos(criterio, fecha_inicial, fecha_final, edades):
@@ -582,14 +687,26 @@ def reporte_severidad(request):
 
         context = estrategico_severidades(cod_criterio, fecha_inicio, fecha_final, edades, cod_sexo, cod_resid)
 
+        parametros = {
+            'fecha_desde': fecha_inicio,
+            'fecha_hasta': fecha_final,
+            'criterio': criterio,
+            'sexo': sexo,
+            'residencia': residencia,
+            'etario': etario
+        }
+        context['parametros'] = parametros
+
     else:  # Desde el principio de los tiempos
         context = estrategico_severidades('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17], 'M', 'U')
+
+    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     return render(request, 'reporte_severidad.html', context)
 
 def estrategico_severidades(criterio, fecha_inicial, fecha_final, edades, sexo, residencia):
     context = {}
-    sever_query = 'select a."severidad", count(*) as Afectados from (select (case when "CodCar"%%10=0 then %s when ("CodCar"%%10>=1 and "CodCar"%%10<=3) then %s when ("CodCar"%%10>=4 and "CodCar"%%10<=6) then %s else %s end) as Severidad from gerencial_superficie as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul">%s and "FechaConsul"<%s) and "Sexo"=%s and "Residencia"=%s and ("Edad" between %s and %s)) as a group by a."severidad";'
+    sever_query = 'select a."severidad", count(*) as Afectados from (select "Paciente_id", (case when "CodCar"%%10=0 then %s when ("CodCar"%%10>=1 and "CodCar"%%10<=3) then %s when ("CodCar"%%10>=4 and "CodCar"%%10<=6) then %s else %s end) as Severidad from gerencial_superficie as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul">%s and "FechaConsul"<%s) and "Sexo"=%s and "Residencia"=%s and ("Edad" between %s and %s) group by "Paciente_id", Severidad) as a group by a."severidad";'
     with connection.cursor() as cursor:
         cursor.execute(sever_query, ['Sano', 'Esmalte', 'Dentina', 'Perdido', fecha_inicial, fecha_final, sexo, residencia, edades[0], edades[1]])
         columns = [col[0] for col in cursor.description]
