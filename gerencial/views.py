@@ -692,7 +692,7 @@ def reporte_severidad(request):
             'fecha_hasta': fecha_final,
             'criterio': criterio,
             'sexo': sexo,
-            'residencia': residencia,
+            'residencia': resid,
             'etario': etario
         }
         context['parametros'] = parametros
