@@ -115,6 +115,18 @@ def reporte_frec_grupales(request):
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
+    id_accion = Accion.objects.get(pk=12)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
+
     return render(request, 'reporte_frec_grupales.html', context)
 
 def consultar_indices(criterio, fecha_inicial, fecha_final):
@@ -177,6 +189,18 @@ def reporte_comp_diagnostico(request):
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
+    id_accion = Accion.objects.get(pk=14)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
+
     return render(request, 'reporte_comp_diagnostico.html', context)
 
 def consultar_prevalencias(criterio, fecha_inicial, fecha_final):
@@ -236,6 +260,18 @@ def reporte_est_superficie(request):
         context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
+    id_accion = Accion.objects.get(pk=15)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
 
     return render(request, 'reporte_est_superficie.html', context)
 
@@ -300,6 +336,18 @@ def reporte_clas_severidad(request):
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
+    id_accion = Accion.objects.get(pk=16)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
+
     return render(request, 'reporte_clas_severidad.html', context)
 
 def consultar_severidades(criterio, fecha_inicial, fecha_final):
@@ -339,6 +387,18 @@ def reporte_clas_pacientes(request):
         context = consultar_pacientes('0', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
+    id_accion = Accion.objects.get(pk=11)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
 
     return render(request, 'reporte_clas_pacientes.html', context)
 
@@ -414,6 +474,18 @@ def reporte_nec_trat_svariable(request):
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
+    id_accion = Accion.objects.get(pk=13)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
+
     return render(request, 'reporte_nec_trat_var.html', context)
 
 def rango_edades(etario):
@@ -468,6 +540,18 @@ def reporte_pac_atendidos(request):
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
+    id_accion = Accion.objects.get(pk=6)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
+
     return render(request, 'reporte_pac_atendidos.html', context)
 
 def pacientes_atendidos(reporte, fecha_inicial, fecha_final):
@@ -517,6 +601,18 @@ def reporte_frecuencias(request):
         context = indices_estrategico('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
+    id_accion = Accion.objects.get(pk=7)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
 
     return render(request, 'reporte_frecuencias.html', context)
 
@@ -573,6 +669,18 @@ def reporte_prevalencias(request):
         context = estrategico_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
+    id_accion = Accion.objects.get(pk=8)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
 
     return render(request, 'reporte_prevalencias.html', context)
 
@@ -643,6 +751,18 @@ def reporte_nec_tratamiento(request):
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
+    id_accion = Accion.objects.get(pk=9)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
+
     return render(request, 'reporte_nec_tratamiento.html', context)
 
 def estrategico_tratamientos(criterio, fecha_inicial, fecha_final, edades):
@@ -701,6 +821,18 @@ def reporte_severidad(request):
         context = estrategico_severidades('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17], 'M', 'U')
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+
+    id_accion = Accion.objects.get(pk=10)
+    id = id_accion.id
+
+    new_user_bit = Bitacora.objects.create(
+        Usuario_id=request.user.id,
+        Accion_id=id
+    )
+    try:
+        new_user_bit.save()
+    except:
+        pass
 
     return render(request, 'reporte_severidad.html', context)
 
