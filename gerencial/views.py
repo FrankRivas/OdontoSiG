@@ -40,7 +40,7 @@ def reporte_bitacora(request):
             desde = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%d de %B de %Y")
         else:
             desde = "el origen de los tiempos"
-        fecha_hasta = request.POST.get('fecha_hasta')
+        fecha_hasta = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
     else:
         g = True
         fecha_desde = (datetime.date.today() - timedelta(datetime.date.today().day - 1)).strftime("%Y-%m-%d")
@@ -55,10 +55,10 @@ def reporte_bitacora(request):
     if g:
         acciones = acciones.filter(FechaAccion__gte=fecha_desde)
     if request.POST.get('fecha_desde'):
-        a = request.POST.get('fecha_desde')
+        a = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
         acciones = acciones.filter(FechaAccion__gte=a[6:] + "-" + a[3:5] + "-" + a[:2])
     if request.POST.get('fecha_hasta'):
-        b = request.POST.get('fecha_hasta')
+        b = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         acciones = acciones.filter(FechaAccion__lte=b[6:] + "-" + b[3:5] + "-" + b[:2])
 
     #acciones = Bitacora.objects.all()
@@ -95,8 +95,8 @@ def reporte_conexion(request):
 def reporte_frec_grupales(request):
 
     if request.method=='POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
         if criterio == '1':
@@ -157,8 +157,8 @@ def procesar_resultado_frecuencias(cursor):
 def reporte_comp_diagnostico(request):
 
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
         if criterio == '1':
@@ -218,8 +218,8 @@ def procesar_resultado_prevalencias(cursor):
 def reporte_est_superficie(request):
 
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
         if criterio == '1':
@@ -278,8 +278,8 @@ def procesar_resultado_superficies(cursor):
 def reporte_clas_severidad(request):
 
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
 
         cod_criterio = '"EstICDAS"'
@@ -323,8 +323,8 @@ def consultar_severidades(criterio, fecha_inicial, fecha_final):
 def reporte_clas_pacientes(request):
 
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         reporte = request.POST.get('reporte')
 
         context = consultar_pacientes(reporte, fecha_inicio, fecha_final)
@@ -389,8 +389,8 @@ def consultar_pacientes(reporte, fecha_inicio, fecha_final):
 
 def reporte_nec_trat_svariable(request):
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         grupo_etario = request.POST.get('etario')
         cod_criterio = '"EstICDAS"'
@@ -450,8 +450,8 @@ def consultar_tratamientos(criterio, fecha_inicial, fecha_final, edades):
 def reporte_pac_atendidos(request):
 
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         reporte = request.POST.get('reporte')
 
         context = pacientes_atendidos(reporte, fecha_inicio, fecha_final)
@@ -498,8 +498,8 @@ def pacientes_atendidos(reporte, fecha_inicial, fecha_final):
 def reporte_frecuencias(request):
 
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
         if criterio == '1':
@@ -555,8 +555,8 @@ def indices_estrategico(criterio, fecha_inicial, fecha_final):
 #Inicia reporte estrategico de prevalencias
 def reporte_prevalencias(request):
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
         if criterio == '1':
@@ -618,8 +618,8 @@ def est_procesar_prevalencias(cursor):
 def reporte_nec_tratamiento(request):
 
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         grupo_etario = request.POST.get('etario')
         cod_criterio = '"EstICDAS"'
@@ -664,8 +664,8 @@ def estrategico_tratamientos(criterio, fecha_inicial, fecha_final, edades):
 #Inicia reporte estrategico de severidad
 def reporte_severidad(request):
     if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_desde')
-        fecha_final = request.POST.get('fecha_hasta')
+        fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         sexo = request.POST.get('sexo')
         resid = request.POST.get('residencia')
