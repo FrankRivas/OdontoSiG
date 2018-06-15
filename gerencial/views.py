@@ -32,6 +32,7 @@ def image_to_base64(url):
 
     return image
 
+
 def reporte_bitacora(request):
     locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
     if request.method == 'POST':
@@ -40,7 +41,7 @@ def reporte_bitacora(request):
             desde = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%d de %B de %Y")
         else:
             desde = "el origen de los tiempos"
-        fecha_hasta = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        fecha_hasta = request.POST.get('fecha_hasta')
     else:
         g = True
         fecha_desde = (datetime.date.today() - timedelta(datetime.date.today().day - 1)).strftime("%Y-%m-%d")
@@ -55,10 +56,10 @@ def reporte_bitacora(request):
     if g:
         acciones = acciones.filter(FechaAccion__gte=fecha_desde)
     if request.POST.get('fecha_desde'):
-        a = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        a = request.POST.get('fecha_desde')
         acciones = acciones.filter(FechaAccion__gte=a[6:] + "-" + a[3:5] + "-" + a[:2])
     if request.POST.get('fecha_hasta'):
-        b = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
+        b = request.POST.get('fecha_hasta')
         acciones = acciones.filter(FechaAccion__lte=b[6:] + "-" + b[3:5] + "-" + b[:2])
 
     #acciones = Bitacora.objects.all()
@@ -74,7 +75,6 @@ def reporte_bitacora(request):
     }
 
     return render(request, 'reporte_bitacora.html', context)
-
 
 def reporte_conexion(request):
     conexiones = User.objects.all()
