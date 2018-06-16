@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 
+        <div class="col s12">
+            <div class="offset-s3" style="float:right; padding-top: 2%;">
+                <a class="btn-floating btn-small waves-effect waves-light" onclick="mostrarAyuda();"><i class="material-icons">info</i></a>
+            </div>
+        </div>
+
         <div class="">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
@@ -26,28 +32,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col s12 m7">
-                    <div class="row">
-                        <div class="input-field col s12 criterios" id="criterios">
-                            <i class="material-icons prefix">content_paste</i>
-                                <select name = "criterio" id="criterio" >
-                                    <option value="0">CPOD</option>
-                                    <option value="1">ceod</option>
-                                    <option value="2">CPOM</option>
-                                    <option value="3">CPOS+CPOD</option>
-                                    <option value="4">CPOS+ceod</option>
-                                </select>
-                            <div class="help-block">Criterio</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         <div class="layout-row row" style="display: flex; justify-content: center; align-items: center;">
             <div class="col s12 m7">
                 <div class="row">
                     <div class="input-field col s12 criterios" id="criterios">
                         <i class="material-icons prefix">content_paste</i>
-                            <select name = "criterio2" id="criterio2" >
+                            <select name="criterio" id="criterio" >
                                 <option value="0">ICDAS</option>
                                 <option value="1">OMS</option>
                             </select>
@@ -208,6 +199,17 @@
         var cpod = "{{ cpod | safe }}";
         var ceod = "{{ ceod | safe }}";
         var cpom = "{{ cpom | safe }}";
+        var parametros = "{{ parametros | safe }}";
+        var flag = true;
+        if(parametros.length != 0) {
+            parametros = parametros.split("'").join('"');
+            parametros = JSON.parse(parametros);
+        }
+        else {
+            flag = false;
+            parametros = '{"fecha_desde":"","fecha_hasta":"","criterio":"","criterio2":""}';
+        }
+
         cposd = cposd.split("'").join('"');
         cpose = cpose.split("'").join('"');
         cpod = cpod.split("'").join('"');
@@ -218,6 +220,8 @@
         cpod = JSON.parse(cpod);
         ceod = JSON.parse(ceod);
         cpom = JSON.parse(cpom);
+
+        console.log(parametros);
         console.log(cposd);
         console.log(cpose);
         console.log(cpod);

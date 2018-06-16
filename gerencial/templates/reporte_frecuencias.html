@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 
+        <div class="col s12">
+            <div class="offset-s3" style="float:right; padding-top: 2%;">
+                <a class="btn-floating btn-small waves-effect waves-light" onclick="mostrarAyuda();"><i class="material-icons">info</i></a>
+            </div>
+        </div>
+
         <div class="">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
@@ -182,6 +188,16 @@
         var ceod = "{{ ceod | safe }}";
         var cpom = "{{ cpom | safe }}";
         var cpos = "{{ cpos | safe }}";
+        var parametros = "{{ parametros | safe }}";
+        var flag = true;
+        if(parametros.length != 0) {
+            parametros = parametros.split("'").join('"');
+            parametros = JSON.parse(parametros);
+        }else {
+            flag = false;
+            parametros = '{"fecha_desde":"","fecha_hasta":"","criterio":""}';
+        }
+        console.log(parametros);
         cpod = cpod.split("'").join('"');
         ceod = ceod.split("'").join('"');
         cpom = cpom.split("'").join('"');

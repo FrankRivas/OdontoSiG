@@ -573,7 +573,6 @@ def pacientes_atendidos(reporte, fecha_inicial, fecha_final):
 
         context['cols'] = columns
         context['reporte'] = query_res
-
     return context
 
 #Finaliza reporte estrategico de pacientes atendidos
@@ -742,7 +741,7 @@ def reporte_nec_tratamiento(request):
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
             'criterio': criterio,
-            'etario': etario
+            'etario': grupo_etario
         }
         context['parametros'] = parametros
 
@@ -810,7 +809,7 @@ def reporte_severidad(request):
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': criterio,
+            #'criterio': criterio,
             'sexo': sexo,
             'residencia': resid,
             'etario': etario

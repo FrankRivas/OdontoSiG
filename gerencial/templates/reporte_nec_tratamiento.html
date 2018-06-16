@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 
+        <div class="col s12">
+            <div class="offset-s3" style="float:right; padding-top: 2%;">
+                <a class="btn-floating btn-small waves-effect waves-light" onclick="mostrarAyuda();"><i class="material-icons">info</i></a>
+            </div>
+        </div>
+
         <div class="">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
@@ -128,10 +134,21 @@
     <script type="text/javascript">
         var logo = "{% static 'gerencial/img/odonto_logo.png' %}";
         var trata = "{{ tratamientos | safe }}";
+        var parametros = "{{ parametros | safe }}";
+        var flag = true;
         trata = trata.split("'").join('"');
         to_data_url(logo, function(dataUrl) {
            logo = dataUrl;
         });
+
+        if(parametros.length != 0) {
+            parametros = parametros.split("'").join('"');
+            parametros = JSON.parse(parametros);
+        } else {
+            flag = false;
+            parametros = '{"fecha_desde":"","fecha_hasta":"","criterio":"","etario":""}';
+        }
+        console.log(parametros);
     </script>
     <script src="{% static 'gerencial/js/reporte_nec_tratamiento.js' %}"></script>
 

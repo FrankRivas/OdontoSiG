@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 
+        <div class="col s12">
+            <div class="offset-s3" style="float:right; padding-top: 2%;">
+                <a class="btn-floating btn-small waves-effect waves-light" onclick="mostrarAyuda();"><i class="material-icons">info</i></a>
+            </div>
+        </div>
+
         <div class="">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
@@ -30,12 +36,10 @@
                     <div class="row">
                         <div class="input-field col s12 criterios" id="criterios">
                             <i class="material-icons prefix">content_paste</i>
-                            <select name = "sexo" id="sexo" >
-                    <option value="0">Masculino</option>
-                    <option value="1">Femenino</option>
-
-
-</select>
+                                <select name = "sexo" id="sexo" >
+                                    <option value="0">Masculino</option>
+                                    <option value="1">Femenino</option>
+                                </select>
                             <div class="help-block">Criterio</div>
                         </div>
                     </div>
@@ -46,12 +50,10 @@
                     <div class="row">
                         <div class="input-field col s12 criterios" id="criterios">
                             <i class="material-icons prefix">content_paste</i>
-                            <select name = "residencia" id="residencia" >
-                    <option value="0">Urbano</option>
-                    <option value="1">Rural</option>
-
-
-</select>
+                                <select name = "residencia" id="residencia" >
+                                    <option value="0">Urbano</option>
+                                    <option value="1">Rural</option>
+                                </select>
                             <div class="help-block">Criterio</div>
                         </div>
                     </div>
@@ -60,14 +62,12 @@
                     <div class="row">
                         <div class="input-field col s12 criterios" id="criterios">
                             <i class="material-icons prefix">content_paste</i>
-                            <select name = "etario" id="etario" >
-                    <option value="0"> 2 - 5 Años</option>
-                    <option value="1"> 6 - 12 Años</option>
-                                <option value="2"> 13 - 17 Años</option>
-                                <option value="3"> 18 + Años</option>
-
-
-</select>
+                                <select name = "etario" id="etario" >
+                                    <option value="0"> 2 - 5 Años</option>
+                                    <option value="1"> 6 - 12 Años</option>
+                                    <option value="2"> 13 - 17 Años</option>
+                                    <option value="3"> 18 + Años</option>
+                                </select>
                             <div class="help-block">Criterio</div>
                         </div>
                     </div>
@@ -120,8 +120,18 @@
                 logo = dataUrl;
             });
             var severidad = "{{ severidades | safe }}";
+            var parametros = "{{ parametros | safe }}";
+            var flag = true;
+            if(parametros.length != 0) {
+                parametros = parametros.split("'").join('"');
+                parametros = JSON.parse(parametros);
+            } else {
+                flag = false;
+                parametros = '{"fecha_desde":"","fecha_hasta":"","sexo":"","residencia":"","etario":""}';
+            }
             severidad = severidad.split("'").join('"');
             severidad = JSON.parse(severidad);
+            console.log(parametros);
             console.log(severidad);
         </script>
         <script src="{% static 'gerencial/js/reporte_severidad.js' %}"></script>

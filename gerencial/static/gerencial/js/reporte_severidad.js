@@ -71,7 +71,22 @@ Highcharts.chart("container", {
         fontSize: "18px"
     }).add();
     chart.setTitle({text:"<div class='col s12'>" +
-        "<div class='offset-s4'><p class='center-align'>Informe de severidad de caries</p></div></div>"});
-    chart.setSubtitle({text:"<div class='col s12'>" +
-        "<div class='offset-s3'><p class='center-align'>Desde: " + " hasta: </p></div></div>"});
+        "<div class='offset-s4'><p class='center-align'>INFORME DE SEVERIDAD DE CARIES</p></div></div>"});
+    if(flag == true) {
+        var fi = new Date(parametros.fecha_desde);
+        var fh = new Date(parametros.fecha_hasta);
+        fi = new Intl.DateTimeFormat("en-GB").format(fi);
+        fh = new Intl.DateTimeFormat("en-GB").format(fh);
+        chart.setSubtitle({text: "<div class='col s12'>" +
+            "<div class='row'><p class='center-align'>Datos desde:" + fi + " hasta: " + fh + "</p><br></div>" +
+            "<div class='row'>" +
+            "<p class='center-align'>Según sexo: "+ $("#sexo option[value='" + parametros.sexo + "']").text() +
+            ",residencia: "+ $("#residencia option[value='" + parametros.residencia + "']").text() +
+            ", grupo etario:  "+ $("#etario option[value='" + parametros.etario + "']").text() +
+            "</p></div>" +
+            "</div>"});
+    } else {
+        chart.setSubtitle({text:"<div class='col s12'>" +
+        "<div class='offset-s3'><p class='center-align'>Datos de muestra</p></div></div>"});
+    }
 });

@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+
+        <div class="col s12">
+            <div class="offset-s3" style="float:right; padding-top: 2%;">
+                <a class="btn-floating btn-small waves-effect waves-light" onclick="mostrarAyuda();"><i class="material-icons">info</i></a>
+            </div>
+        </div>
+
         <div class="">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
@@ -86,9 +93,19 @@
             var logo = "{% static 'gerencial/img/odonto_logo.png' %}";
             var columnas = {{ cols|safe }};
             var filas = "{{ reporte|safe }}";
+            var parametros = "{{ parametros | safe }}";
+            var flag = true;
+            if(parametros.length != 0) {
+                parametros = parametros.split("'").join('"');
+                parametros = JSON.parse(parametros);
+            } else {
+                flag = false;
+                parametros = '{"fecha_desde":"","fecha_hasta":"","reporte":"0"}';
+            }
             filas = filas.split("(").join('[');
             filas = filas.split(")").join(']');
             filas = eval(filas);
+            console.log(parametros);
             console.log(columnas);
             console.log(filas);
             to_data_url(logo, function(toDataUrl) {
@@ -111,7 +128,6 @@
                     maxViewMode: 3,
                     autoclose: true,
                     language: "es",
-                    daysOfWeekHighlighted: "0",
                     clearBtn: true,
                     todayHighlight: true,
                     orientation: "bottom auto",
@@ -131,7 +147,6 @@
                 maxViewMode: 3,
                 autoclose: true,
                 language: "es",
-                daysOfWeekHighlighted: "0",
                 clearBtn: true,
                 todayHighlight: true,
                 orientation: "bottom auto",
