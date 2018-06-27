@@ -465,7 +465,7 @@ def reporte_nec_trat_svariable(request):
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
             'criterio': criterio,
-            'etario': etario
+            'etario': grupo_etario
         }
         context['parametros'] = parametros
 

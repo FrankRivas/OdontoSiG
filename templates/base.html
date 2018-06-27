@@ -60,48 +60,25 @@
                 {% for group in groups %}
                     {% if group == 'Estrategico'%}
                         <li><div class="divider"></div></li>
-                        <li>
-                            <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Reportes Estrategicos</div>
-
-                                <div class="collapsible-body"><span><a href="{% url 'pacientes_atendidos' %}"><center>Pacientes Atendidos</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'frecuencias' %}"><center>Frecuencias</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'prevalencias' %}"><center>Prevalencias</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'necesidades_tratamiento' %}"><center>Necesidades de Tratamiento</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'severidad' %}"><center>Severidad</center></a></span></div>
-                        </li>
+                                <li><a href="{% url 'pacientes_atendidos' %}"><center>Pacientes Atendidos</center></a></li>
+                                <li><a href="{% url 'frecuencias' %}"><center>Frecuencias</center></a></li>
+                                <li><a href="{% url 'prevalencias' %}"><center>Prevalencias</center></a></li>
+                                <li><a href="{% url 'necesidades_tratamiento' %}"><center>Necesidades de Tratamiento</center></a></li>
+                                <li><a href="{% url 'severidad' %}"><center>Severidad de Caries</center></a></li>
                         {% elif group == 'Tactico'%}
                         <li><div class="divider"></div></li>
-                        <li>
-                            <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Reportes Tacticos</div>
-
-                                <div class="collapsible-body"><span><a href="{% url 'frecuencias_grupales' %}"><center>Frecuencias Grupales</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'prevalencia_piezas' %}"><center>Prevalencia de Piezas</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'estado_superficie' %}"><center>Estados de Superficie</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'clasificacion_severidad' %}"><center>Clasificacion de Severidad</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'clasificacion_pacientes' %}"><center>Clasificacion de Pacientes</center></a></span></div>
-                                <div class="collapsible-body"><span><a href="{% url 'necesidad_segun_variable' %}"><center>Necesidades por Variable</center></a></span></div>
-                        </li>
+                                <li><a href="{% url 'frecuencias_grupales' %}"><center>Frecuencias Grupales</center></a></li>
+                                <li><a href="{% url 'prevalencia_piezas' %}"><center>Prevalencia de Piezas</center></a></li>
+                                <li><a href="{% url 'estado_superficie' %}"><center>Estados de Superficie</center></a></li>
+                                <li><a href="{% url 'clasificacion_severidad' %}"><center>Clasificacion de Severidad</center></a></li>
+                                <li><a href="{% url 'clasificacion_pacientes' %}"><center>Clasificacion de Pacientes</center></a></li>
+                                <li><a href="{% url 'necesidad_segun_variable' %}"><center>Necesidades por Variable</center></a></li>
         {%elif group == 'Administrador'%}
                         <li><div class="divider"></div></li>
-                        <li>
-                            <div class="collapsible-header"><i class="material-icons">supervisor_account</i>Usuarios</div>
-
-                                <div class="collapsible-body"><span><a href="{% url 'agregar_usuarios' %}"><center>Agregar Usuario</center></a></span></div>
-
-
-                                <div class="collapsible-body"><span><a href="{% url 'usuarios' %}"><center>Consultar Usuarios</center></a></span></div>
-
-                        </li>
-
-                        <li>
-                            <div class="collapsible-header"><i class="material-icons">assignment</i>Bitacoras</div>
-
-                                <div class="collapsible-body"><span><a href="{% url 'reporte_bitacora' %}"><center>Bitacora de Acciones</center></a></span></div>
-
-
-                                <div class="collapsible-body"><span><a href="{% url 'reporte_conexiones' %}"><center>Ultimas Conexiones</center></a></span></div>
-
-                        </li>
+                        <li><a href="{% url 'agregar_usuarios' %}"><center>Agregar Usuario</center></a></li>
+                        <li><a href="{% url 'usuarios' %}"><center>Consultar Usuarios</center></a></li>
+                        <li><a href="{% url 'reporte_bitacora' %}"><center>Bitacora de Acciones</center></a></li>
+                        <li><a href="{% url 'reporte_conexiones' %}"><center>Ultimas Conexiones</center></a></li>
 
                     {%endif%}
                 {% endfor %}

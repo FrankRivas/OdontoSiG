@@ -58,7 +58,7 @@
 
         </form>
     <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
-        <h4><center>Comparativas de Pacientes</center></h4>
+        <h4><center>Clasificacion de Pacientes</center></h4>
 
         <div class="row" id="content">
             <div class="col s12">
@@ -93,7 +93,7 @@
         // to an actual DOM element from which the text will be scraped.
         var imgData = '{{ imagen }}';
 pdf.addImage(imgData, 'JPEG', 150, 40, 300, 100);
-pdf.text(220, 160, "Comparativas de Pacientes");
+pdf.text(220, 160, "Clasificación de Pacientes");
         source = $('#content')[0];
 
         // we support special element handlers. Register them with jQuery-style

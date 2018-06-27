@@ -51,7 +51,7 @@
             </div>
         </form>
     <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
-        <h4><center>Afectados por Severidad de Caries</center></h4>
+        <h4><center>Clasificacion de Severidad</center></h4>
 
         <div class="row" id="content">
             <div class="col s12">
@@ -83,7 +83,7 @@
         // to an actual DOM element from which the text will be scraped.
         var imgData = '{{ imagen }}';
 pdf.addImage(imgData, 'JPEG', 150, 40, 300, 100);
-pdf.text(190, 160, "Afectados por Severidad de Caries");
+pdf.text(190, 160, "Clasificación de Severidad");
         source = $('#content')[0];
 
         // we support special element handlers. Register them with jQuery-style
@@ -116,7 +116,7 @@ pdf.text(190, 160, "Afectados por Severidad de Caries");
             function (dispose) {
                 // dispose: object with X, Y of the last line add to the PDF
                 //          this allow the insertion of new lines after html
-                pdf.save('ClasificacionSeveridades.pdf');
+                pdf.save('ClasificacionSeveridad.pdf');
             }, margins
         );
 
