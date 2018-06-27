@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 import locale
 import datetime
 from datetime import timedelta
-from operator import itemgetter
+freprom operator import itemgetter
 from operator import itemgetter
 # Create your views here.
 class Inicio(LoginRequiredMixin, TemplateView):
@@ -99,36 +99,33 @@ def reporte_frec_grupales(request):
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
-        nombre_criterio = 'ICDAS'
         if criterio == '1':
             cod_criterio = '"EstOMS"'
-            nombre_criterio = 'OMS'
         context = consultar_indices(cod_criterio, fecha_inicio, fecha_final)
 
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': nombre_criterio
+            'criterio': criterio
         }
         context['parametros'] = parametros
 
     else: #Desde el principio de los tiempos
-        # context = consultar_indices('"EstICDAS"', '1999-01-01', datetime.date.today())
-        context = {}
+        context = consultar_indices('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
-    id_accion = Accion.objects.get(pk=12)
-    id = id_accion.id
+    #id_accion = Accion.objects.get(pk=12)
+    #id = id_accion.id
 
-    new_user_bit = Bitacora.objects.create(
-        Usuario_id=request.user.id,
-        Accion_id=id
-    )
-    try:
-        new_user_bit.save()
-    except:
-        pass
+    #new_user_bit = Bitacora.objects.create(
+    #    Usuario_id=request.user.id,
+    #    Accion_id=id
+    #)
+    #try:
+    #    new_user_bit.save()
+    #except:
+    #    pass
 
     return render(request, 'reporte_frec_grupales.html', context)
 
@@ -176,22 +173,20 @@ def reporte_comp_diagnostico(request):
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
-        nombre_criterio = 'ICDAS'
         if criterio == '1':
             cod_criterio = '"EstOMS"'
-            nombre_criterio = 'OMS'
         context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
 
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': nombre_criterio
+            'criterio': criterio
         }
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
-        context = {}
+        context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
+
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=14)
@@ -251,21 +246,18 @@ def reporte_est_superficie(request):
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
-        nombre_criterio = "ICDAS"
         if criterio == '1':
             cod_criterio = '"EstOMS"'
-            nombre_criterio = "OMS"
         context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
 
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': nombre_criterio
+            'criterio': criterio
         }
         context['parametros'] = parametros
     else:  # Desde el principio de los tiempos
-        # context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
-        context = {}
+        context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -325,23 +317,22 @@ def reporte_clas_severidad(request):
         fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
+
         cod_criterio = '"EstICDAS"'
-        nombre_criterio = 'ICDAS'
         if criterio == '1':
             cod_criterio = '"EstOMS"'
-            nombre_criterio = 'OMS'
+
 
         context = consultar_severidades(cod_criterio, fecha_inicio, fecha_final)
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': nombre_criterio
+            'criterio': criterio
         }
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = consultar_severidades('"EstICDAS"', '1999-01-01', datetime.date.today())
-        context = {}
+        context = consultar_severidades('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -393,8 +384,7 @@ def reporte_clas_pacientes(request):
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = consultar_pacientes('0', '1999-01-01', datetime.date.today())
-        context = {}
+        context = consultar_pacientes('0', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -464,10 +454,8 @@ def reporte_nec_trat_svariable(request):
         criterio = request.POST.get('criterio')
         grupo_etario = request.POST.get('etario')
         cod_criterio = '"EstICDAS"'
-        grupo_nombre = "ICDAS"
         if criterio == '1':
             cod_criterio = '"EstOMS"'
-            grupo_nombre = 'OMS'
 
         edades = rango_edades(grupo_etario)
 
@@ -476,14 +464,13 @@ def reporte_nec_trat_svariable(request):
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': grupo_nombre,
-            'etario': grupo_etario
+            'criterio': criterio,
+            'etario': etario
         }
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = consultar_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
-        context = {}
+        context = consultar_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -549,8 +536,7 @@ def reporte_pac_atendidos(request):
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = pacientes_atendidos('0', '1999-01-01', datetime.date.today())
-        context = {}
+        context = pacientes_atendidos('0', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -611,8 +597,7 @@ def reporte_frecuencias(request):
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = indices_estrategico('"EstICDAS"', '1999-01-01', datetime.date.today())
-        context = {}
+        context = indices_estrategico('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -680,8 +665,7 @@ def reporte_prevalencias(request):
         }
         context['parametros'] = parametros
     else:  # Desde el principio de los tiempos
-        # context = estrategico_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
-        context = {}
+        context = estrategico_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -762,8 +746,7 @@ def reporte_nec_tratamiento(request):
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = estrategico_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
-        context = {}
+        context = estrategico_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
@@ -834,8 +817,7 @@ def reporte_severidad(request):
         context['parametros'] = parametros
 
     else:  # Desde el principio de los tiempos
-        # context = estrategico_severidades('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17], 'M', 'U')
-        context = {}
+        context = estrategico_severidades('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17], 'M', 'U')
 
     context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
