@@ -99,14 +99,16 @@ def reporte_frec_grupales(request):
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
+        nombre_criterio = 'ICDAS'
         if criterio == '1':
             cod_criterio = '"EstOMS"'
+            nombre_criterio = 'OMS'
         context = consultar_indices(cod_criterio, fecha_inicio, fecha_final)
 
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': criterio
+            'criterio': nombre_criterio
         }
         context['parametros'] = parametros
 
@@ -173,14 +175,16 @@ def reporte_comp_diagnostico(request):
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
+        nombre_criterio = 'ICDAS'
         if criterio == '1':
             cod_criterio = '"EstOMS"'
+            nombre_criterio = 'OMS'
         context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
 
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': criterio
+            'criterio': nombre_criterio
         }
         context['parametros'] = parametros
 
@@ -246,14 +250,16 @@ def reporte_est_superficie(request):
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
         cod_criterio = '"EstICDAS"'
+        nombre_criterio = "ICDAS"
         if criterio == '1':
             cod_criterio = '"EstOMS"'
+            nombre_criterio = "OMS"
         context = consultar_prevalencias(cod_criterio, fecha_inicio, fecha_final)
 
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': criterio
+            'criterio': nombre_criterio
         }
         context['parametros'] = parametros
     else:  # Desde el principio de los tiempos
@@ -317,17 +323,17 @@ def reporte_clas_severidad(request):
         fecha_inicio = datetime.datetime.strptime(request.POST.get('fecha_desde'), '%d/%m/%Y').strftime("%Y-%m-%d")
         fecha_final = datetime.datetime.strptime(request.POST.get('fecha_hasta'), '%d/%m/%Y').strftime("%Y-%m-%d")
         criterio = request.POST.get('criterio')
-
         cod_criterio = '"EstICDAS"'
+        nombre_criterio = 'ICDAS'
         if criterio == '1':
             cod_criterio = '"EstOMS"'
-
+            nombre_criterio = 'OMS'
 
         context = consultar_severidades(cod_criterio, fecha_inicio, fecha_final)
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': criterio
+            'criterio': nombre_criterio
         }
         context['parametros'] = parametros
 
@@ -454,8 +460,10 @@ def reporte_nec_trat_svariable(request):
         criterio = request.POST.get('criterio')
         grupo_etario = request.POST.get('etario')
         cod_criterio = '"EstICDAS"'
+        grupo_nombre = "ICDAS"
         if criterio == '1':
             cod_criterio = '"EstOMS"'
+            grupo_nombre = 'OMS'
 
         edades = rango_edades(grupo_etario)
 
@@ -464,7 +472,7 @@ def reporte_nec_trat_svariable(request):
         parametros = {
             'fecha_desde': fecha_inicio,
             'fecha_hasta': fecha_final,
-            'criterio': criterio,
+            'criterio': grupo_nombre,
             'etario': grupo_etario
         }
         context['parametros'] = parametros

@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+    <script src="{% static 'gerencial/js/jquery-2.1.1.js' %}"></script>
     <script src="{% static 'gerencial/js/jspdf.min.js' %}"></script>
-        <div class="">
+        <div class="col s12">
+            <div class="offset-s3" style="float:right; padding-top: 2%;">
+                <a class="btn-floating btn-small waves-effect waves-light modal-trigger" href="#modal1"><i class="material-icons">info</i></a>
+            </div>
+        </div>
+        <div class="row">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
         <form method="post" action="">
@@ -30,11 +36,10 @@
                     <div class="row">
                         <div class="input-field col s12 criterios" id="criterios">
                             <i class="material-icons prefix">content_paste</i>
-                            <select name = "criterio" id="criterio" >
-                    <option value="0">ICDAS</option>
-                    <option value="1">OMS</option>
-
-</select>
+                                <select name = "criterio" id="criterio" >
+                                    <option value="0">ICDAS</option>
+                                    <option value="1">OMS</option>
+                                </select>
                             <div class="help-block">Criterio: ICDAS u OMS</div>
                         </div>
                     </div>
@@ -51,8 +56,12 @@
             </div>
         </form>
         <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
-        <h4><center>Prevalencia de Piezas</center></h4>
-
+        <h4><center>Tablas de Prevalencia de Piezas</center></h4>
+        <div class="row">
+            <div class="center-align">
+                <p id="parametros"></p>
+            </div>
+        </div>
         <div class="row" id="content">
             <div class="col s12">
                 <h6>CPOD</h6>
@@ -127,14 +136,64 @@
             </div>
         </div>
 
+    <!-- Modal ayuda -->
+    <div id="modal1" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>Tablas de Prevalencia de Piezas</h4>
+            <table>
+                <thead>
+                    <th>Parámetro</th>
+                    <th>Descripción</th>
+                </thead>
+                <tobdy>
+                    <tr>
+                        <td>Desde</td>
+                        <td>Fecha desde la cual desea realizar el filtrado</td>
+                    </tr>
+                    <tr>
+                        <td>Hasta</td>
+                        <td>Fecha hasta la cual desea realizar el filtrado</td>
+                    </tr>
+                    <tr>
+                        <td>Criterio</td>
+                        <td>Criterio de Evaluacion que desea (ICDAS u OMS)</td>
+                    </tr>
+                    <tr>
+                        <td>Botón PDF</td>
+                        <td>Descarga del Documento que se está visualizando</td>
+                    </tr>
+                </tobdy>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+        </div>
+    </div>
 <script>
+
+    var fecha_desde = "{{ parametros.fecha_desde }}";
+    var fecha_hasta = "{{ parametros.fecha_hasta }}";
+    var criterio = "{{ parametros.criterio }}";
+    var fd = new Date(fecha_desde);
+    var fh = new Date(fecha_hasta);
+    fd = new Intl.DateTimeFormat("en-GB").format(fd);
+    fh = new Intl.DateTimeFormat("en-GB").format(fh);
+    $("#parametros").text("Datos desde: " + fd + " hasta: " + fh + " según criterio: " + criterio);
+
     function demoFromHTML() {
         var pdf = new jsPDF('p', 'pt', 'letter');
         // source can be HTML-formatted string, or a reference
         // to an actual DOM element from which the text will be scraped.
         var imgData = '{{ imagen }}';
-pdf.addImage(imgData, 'JPEG', 150, 40, 300, 100);
-pdf.text(230, 160, "Prevalencia de Piezas");
+        pdf.addImage(imgData, 'JPEG', 150, 40, 300, 100);
+        pdf.setFontSize(14);
+        var titulo = "TABLAS DE PREVALENCIA DE PIEZAS";
+        var x1 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(titulo) * pdf.internal.getFontSize() / 2);
+        pdf.text(x1, 160, titulo);
+        var primero = $("#parametros").text();
+        pdf.setFontSize(12);
+        var x2 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(primero) * pdf.internal.getFontSize() / 2);
+        pdf.text(x2, 175, primero);
         source = $('#content')[0];
 
         // we support special element handlers. Register them with jQuery-style
@@ -149,7 +208,7 @@ pdf.text(230, 160, "Prevalencia de Piezas");
             }
         };
         margins = {
-            top: 150,
+            top: 170,
             bottom: 60,
             left: 80,
             width: 522
@@ -174,56 +233,48 @@ pdf.text(230, 160, "Prevalencia de Piezas");
     }
 </script>
 
-
-
     {% block js %}
          <script type="text/javascript">
-            $('input[name="fecha_desde"]').mask('00/00/0000');
-            $('input[name="fecha_hasta"]').mask('00/00/0000');
-        </script>
-        <script type="text/javascript">
-            $('input[name="fecha_desde"]').dblclick(function() {
-                $('input[name="fecha_desde"]').datepicker('show');
-            });
-            $('input[name="fecha_desde"]').click(function() {
-                $('input[name="fecha_desde"]').datepicker('hide');
-            });
-        </script>
-        <script type="text/javascript">
-            $('input[name="fecha_desde"]').datepicker({
-                format: "dd/mm/yyyy",
-                todayBtn: "linked",
-                maxViewMode: 3,
-                autoclose: true,
-                language: "es",
-                daysOfWeekHighlighted: "0",
-                clearBtn: true,
-                todayHighlight: true,
-                orientation: "bottom auto",
-                container: "div.fecha_desde"
-            });
-        </script>
+            $(document).ready(function() {
+                $('input[name="fecha_desde"]').mask('00/00/0000');
+                $('input[name="fecha_hasta"]').mask('00/00/0000');
 
-        <script type="text/javascript">
-            $('input[name="fecha_hasta"]').dblclick(function() {
-                $('input[name="fecha_hasta"]').datepicker('show');
-            });
-            $('input[name="fecha_hasta"]').click(function() {
-                $('input[name="fecha_hasta"]').datepicker('hide');
-            });
-        </script>
-        <script type="text/javascript">
-            $('input[name="fecha_hasta"]').datepicker({
-                format: "dd/mm/yyyy",
-                todayBtn: "linked",
-                maxViewMode: 3,
-                autoclose: true,
-                language: "es",
-                daysOfWeekHighlighted: "0",
-                clearBtn: true,
-                todayHighlight: true,
-                orientation: "bottom auto",
-                container: "div.fecha_hasta"
+                $('input[name="fecha_desde"]').dblclick(function() {
+                    $('input[name="fecha_desde"]').datepicker('show');
+                });
+                $('input[name="fecha_desde"]').click(function() {
+                    $('input[name="fecha_desde"]').datepicker('hide');
+                });
+                $('input[name="fecha_desde"]').datepicker({
+                    format: "dd/mm/yyyy",
+                    todayBtn: "linked",
+                    maxViewMode: 3,
+                    autoclose: true,
+                    language: "es",
+                    daysOfWeekHighlighted: "0",
+                    clearBtn: true,
+                    todayHighlight: true,
+                    orientation: "bottom auto",
+                    container: "div.fecha_desde"
+                });
+                $('input[name="fecha_hasta"]').dblclick(function() {
+                    $('input[name="fecha_hasta"]').datepicker('show');
+                });
+                $('input[name="fecha_hasta"]').click(function() {
+                    $('input[name="fecha_hasta"]').datepicker('hide');
+                });
+                $('input[name="fecha_hasta"]').datepicker({
+                    format: "dd/mm/yyyy",
+                    todayBtn: "linked",
+                    maxViewMode: 3,
+                    autoclose: true,
+                    language: "es",
+                    daysOfWeekHighlighted: "0",
+                    clearBtn: true,
+                    todayHighlight: true,
+                    orientation: "bottom auto",
+                    container: "div.fecha_hasta"
+                });
             });
         </script>
 
