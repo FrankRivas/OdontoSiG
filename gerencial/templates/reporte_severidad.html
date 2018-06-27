@@ -88,7 +88,7 @@
 
         <div id="container" style="height: 700px"></div>
 
-        <div class="row">
+        <div class="row" id="content">
             <div class="col s12">
                 <table id="tabla_tratam" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
                     <thead>
@@ -165,12 +165,14 @@
             if(parametros.length != 0) {
                 parametros = parametros.split("'").join('"');
                 parametros = JSON.parse(parametros);
+                severidad = severidad.split("'").join('"');
+                severidad = JSON.parse(severidad);
             } else {
                 flag = false;
                 parametros = '{"fecha_desde":"","fecha_hasta":"","sexo":"","residencia":"","etario":""}';
+                $("#container").remove();
+                $("#content").remove();
             }
-            severidad = severidad.split("'").join('"');
-            severidad = JSON.parse(severidad);
             console.log(parametros);
             console.log(severidad);
         </script>

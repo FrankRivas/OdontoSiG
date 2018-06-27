@@ -130,6 +130,8 @@
             } else {
                 flag = false;
                 parametros = '{"fecha_desde":"","fecha_hasta":"","reporte":"0"}';
+                $("#content").remove();
+                $("#container").remove();
             }
             filas = filas.split("(").join('[');
             filas = filas.split(")").join(']');

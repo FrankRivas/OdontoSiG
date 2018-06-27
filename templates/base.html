@@ -11,7 +11,8 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'gerencial/css/bootstrap.min.css' %}">
-
+    <!-- -->
+    <link rel="stylesheet" href="{% static 'gerencial/css/base.css' %}">
     <!-- Select2 -->
     <link rel="stylesheet" href={% static 'gerencial/select2/select2.css'%}>
 
@@ -31,7 +32,21 @@
 
     <!--EStilos Personales-->
     <link type="text/css" rel="stylesheet" href="{% static 'gerencial/css/estilos_personales.css' %}" />
+    <script src="{% static 'gerencial/js/jquery-2.1.1.js' %}"></script>
+    <script src="{% static 'gerencial/js/base64.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var imagen = "{% static 'gerencial/img/odonto_logo.png' %}";
 
+            to_data_url(imagen, function(data) {
+                imagen = data;
+            });
+
+            var img = document.createElement("img");
+            img.src = imagen;
+            $("#imagen").html(img);
+        });
+    </script>
 </head>
 <body>
 <header>
@@ -55,41 +70,83 @@
             <span class="white-text email">{{ request.user.email }}</span>
         </div></li>
 
+        {% for groups in request.user.groups.values_list %}
+            {% for group in groups %}
+                {% if group == 'Estrategico'%}
+                    <div class="divider"></div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'pacientes_atendidos' %}"><p class="center-align">Informe de Pacientes Atendidos</p></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'frecuencias' %}"><p class="center-align">Informe de Frecuencias Grupales</p></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'prevalencias' %}"><p class="center-align">Informe de Prevalencia de Piezas</p></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'necesidades_tratamiento' %}"><p class="center-align">Informe de Necesidades de Tratamiento</p></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'severidad' %}"><p class="center-align">Informe de Afectados por Severidad de Caries</p></a>
+                    </div>
+                {% elif group == 'Tactico'%}
+                    <div class="divider"></div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'frecuencias_grupales' %}"><center>Tablas de Frecuencias Grupales</center></a>
+                    </div>
+                    <div class="sidenav-item">
+                       <a href="{% url 'prevalencia_piezas' %}"><center>Tablas de Prevalencia de Piezas</center></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'estado_superficie' %}"><center>Tablas de Prevalencia de Superficie</center></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'clasificacion_severidad' %}"><center>Reporte de Clasificacion de Severidad de Caries</center></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'clasificacion_pacientes' %}"><center>Reporte de Clasificacion de Pacientes</center></a>
+                    </div>
+                    <div class="sidenav-item">
+                        <a href="{% url 'necesidad_segun_variable' %}"><center>Necesidades de Tratamiento por Variables</center></a>
+                    </div>
+                {%elif group == 'Administrador'%}
+                    </div><div class="divider"></div></li>
+                    <div class="sidenav-item"><a href="{% url 'agregar_usuarios' %}"><center>Agregar Usuario</center></a></div>
+                    <div class="sidenav-item"><a href="{% url 'usuarios' %}"><center>Consultar Usuarios</center></a></div>
+                    <div class="sidenav-item"><a href="{% url 'reporte_bitacora' %}"><center>Bitacora de Acciones</center></a></div>
+                    <div class="sidenav-item"><a href="{% url 'reporte_conexiones' %}"><center>Ultimas Conexiones</center></a></div>
+                  {%endif%}
+             {% endfor %}
+        {% endfor %}
         <ul class="collapsible" data-collapsible="accordion">
-            {% for groups in request.user.groups.values_list %}
-                {% for group in groups %}
-                    {% if group == 'Estrategico'%}
-                        <li><div class="divider"></div></li>
-                                <li><a href="{% url 'pacientes_atendidos' %}"><center>Pacientes Atendidos</center></a></li>
-                                <li><a href="{% url 'frecuencias' %}"><center>Tablas de Frecuencia</center></a></li>
-                                <li><a href="{% url 'prevalencias' %}"><center>Tablas de Prevalencia</center></a></li>
-                                <li><a href="{% url 'necesidades_tratamiento' %}"><center>Necesidades de Tratamiento</center></a></li>
-                                <li><a href="{% url 'severidad' %}"><center>Severidad de Caries</center></a></li>
-                        {% elif group == 'Tactico'%}
-                        <li><div class="divider"></div></li>
-                                <li><a href="{% url 'frecuencias_grupales' %}"><center>Frecuencias Grupales</center></a></li>
-                                <li><a href="{% url 'prevalencia_piezas' %}"><center>Prevalencia de Piezas</center></a></li>
-                                <li><a href="{% url 'estado_superficie' %}"><center>Estados de Superficie</center></a></li>
-                                <li><a href="{% url 'clasificacion_severidad' %}"><center>Clasificacion de Severidad</center></a></li>
-                                <li><a href="{% url 'clasificacion_pacientes' %}"><center>Clasificacion de Pacientes</center></a></li>
-                                <li><a href="{% url 'necesidad_segun_variable' %}"><center>Necesidades por Variable</center></a></li>
-        {%elif group == 'Administrador'%}
-                        <li><div class="divider"></div></li>
-                        <li><a href="{% url 'agregar_usuarios' %}"><center>Agregar Usuario</center></a></li>
-                        <li><a href="{% url 'usuarios' %}"><center>Consultar Usuarios</center></a></li>
-                        <li><a href="{% url 'reporte_bitacora' %}"><center>Bitacora de Acciones</center></a></li>
-                        <li><a href="{% url 'reporte_conexiones' %}"><center>Ultimas Conexiones</center></a></li>
 
-                    {%endif%}
-                {% endfor %}
-            {% endfor %}
         </ul>
     </ul>
 </aside>
 <main>
     <div class="container">
         {% block content %}
-
+            <div class="row">
+                <div class="col s12">
+                    <div class="center-align">
+                        <h4>FACULTAD DE ODONTOLOGÍA UES</h4>
+                        <h5>SCAB-FOUES</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="center-align">
+                    <div id="imagen">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="center-align">
+                    <p style="font-size:125%;">Sistema de Información Gerencial para el manejo de expediente clínico de
+índices de riesgo cariogénicos, criterios de evaluación, tablas de prevalencia y
+necesidades de tratamiento</p>
+                </div>
+            </div>
         {%endblock%}
     </div>
 </main>

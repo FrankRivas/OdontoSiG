@@ -150,11 +150,23 @@
         var fecha_desde = "{{ parametros.fecha_desde }}";
         var fecha_hasta = "{{ parametros.fecha_hasta }}";
         var criterio = "{{ parametros.criterio }}";
-        var fd = new Date(fecha_desde);
-        var fh = new Date(fecha_hasta);
-        fd = new Intl.DateTimeFormat("en-GB").format(fd);
-        fh = new Intl.DateTimeFormat("en-GB").format(fh);
-        $("#parametros").text("Datos desde: " + fd + " hasta: " + fh + " según criterio: " + criterio);
+
+        var flag = true;
+        if(fecha_desde == "" || fecha_desde == null || fecha_desde == undefined) {
+            flag = false;
+        }
+
+        if(flag) {
+            var fd = new Date(fecha_desde);
+            var fh = new Date(fecha_hasta);
+            fd = new Intl.DateTimeFormat("en-GB").format(fd);
+            fh = new Intl.DateTimeFormat("en-GB").format(fh);
+            $("#parametros").text("Datos desde: " + fd + " hasta: " + fh + " según criterio: " + criterio);
+        } else {
+            $("#boton").remove();
+            $("#content").remove();
+        }
+
         function demoFromHTML() {
             var pdf = new jsPDF('p', 'pt', 'letter');
             // source can be HTML-formatted string, or a reference

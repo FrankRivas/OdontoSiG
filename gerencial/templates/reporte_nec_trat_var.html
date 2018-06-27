@@ -73,7 +73,7 @@
                 </div>
         </div>
         </form>
-    <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
+        <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
         <h4><center>Necesidades de Tratamiento por Variables</center></h4>
 
         <div id="content">
@@ -154,13 +154,24 @@
     var fecha_hasta = "{{ parametros.fecha_hasta|safe }}";
     var etario = "{{ parametros.etario | safe }}";
     var criterio = "{{ parametros.criterio | safe }}";
-    var fd = new Date(fecha_desde);
-    var fh = new Date(fecha_hasta);
-    fd = new Intl.DateTimeFormat("en-GB").format(fd);
-    fh = new Intl.DateTimeFormat("en-GB").format(fh);
-    etario = $("#etario option[value='" + etario + "']").text();
+    var flag = true;
 
-    $("#parametros").text("Datos desde: " + fd + " hasta " + fh  + " con criterio: " + criterio + " y grupo de: " +  etario);
+    if(fecha_desde == "" || fecha_desde == null || fecha_desde == undefined) {
+        flag = false;
+    }
+
+    if(flag) {
+        var fd = new Date(fecha_desde);
+        var fh = new Date(fecha_hasta);
+        fd = new Intl.DateTimeFormat("en-GB").format(fd);
+        fh = new Intl.DateTimeFormat("en-GB").format(fh);
+        etario = $("#etario option[value='" + etario + "']").text();
+        $("#parametros").text("Datos desde: " + fd + " hasta " + fh  + " con criterio: " + criterio + " y grupo de: " +  etario);
+    } else {
+        $("#boton").remove();
+        $("#content").remove();
+    }
+
     function demoFromHTML() {
         var pdf = new jsPDF('p', 'pt', 'letter');
         // source can be HTML-formatted string, or a reference
@@ -168,8 +179,14 @@
         var imgData = '{{ imagen }}';
         pdf.setFontSize(14);
         pdf.addImage(imgData, 'JPEG', 130, 40, 300, 100);
-        pdf.text(150, 160, "NECESIDADES DE TRATAMIENTO POR VARIABLES").setFontSize(12);
-        pdf.text(80, 180,$("#parametros").text());
+        pdf.setFontSize(14);
+        var titulo = "NECESIDADES DE TRATAMIENTO POR VARIABLES";
+        var x1 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(titulo) * pdf.internal.getFontSize() / 2);
+        pdf.text(x1, 160, titulo);
+        pdf.setFontSize(12);
+        var primero = $("#parametros").text();
+        var x2 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(primero) * pdf.internal.getFontSize() / 2);
+        pdf.text(x2, 180, primero);
         source = $('#content')[0];
 
         // we support special element handlers. Register them with jQuery-style
@@ -184,7 +201,7 @@
             }
         };
         margins = {
-            top: 170,
+            top: 180,
             bottom: 60,
             left: 80,
             width: 522

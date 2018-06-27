@@ -416,16 +416,16 @@ def consultar_pacientes(reporte, fecha_inicio, fecha_final):
     context = {}
 
     rep_0 = 'select "evaluaciones" as "Evaluaciones", count(case when ("Edad">1 and "Edad"<6) then 1 else null end) as "2-5 años", count(case when ("Edad">5 and "Edad"<13) then 1 else null end) as "6-12 años", count(case when ("Edad">12 and "Edad"<18) then 1 else null end) as "13-17 años", count(case when "Edad">=18 then 1 else null end) as "18-mas años" from (select a.id, "Edad", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones from gerencial_paciente as a join gerencial_historialodonto as b on a.id=b."Paciente_id" where ("FechaConsul">=%s and "FechaConsul"<=%s)) as a group by "evaluaciones"';
-    param_0 = [',', fecha_inicio, fecha_final]
+    param_0 = [', ', fecha_inicio, fecha_final]
 
     rep_1 = 'drop table if exists evalhab;create temp table evalhab as select "Paciente_id", "evaluaciones", regexp_split_to_table("HabitosBucal", E%s) as Habitos from (select "Paciente_id", regexp_split_to_table("EvalSistem", E%s) as Evaluaciones, "HabitosBucal" from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where (b."FechaConsul">=%s and b."FechaConsul"<=%s)) as a;select "evaluaciones" as "Evaluaciones", count(case when "habitos"=%s then 1 else null end) as "Respirador", count(case when "habitos"=%s then 1 else null end) as "Onicofagia", count(case when "habitos"=%s then 1 else null end) as "Burxismo", count(case when "habitos"=%s then 1 else null end) as "Otros" from evalhab group by "evaluaciones";'
-    param_1 = [',', ',', fecha_inicio, fecha_final, 'respirador', 'onicofagia', 'burxismo', 'otros']
+    param_1 = [', ', ', ', fecha_inicio, fecha_final, 'respirador', 'onicofagia', 'burxismo', 'otros']
 
     rep_2 = 'select "Sexo", count(case when ("Edad">1 and "Edad"<6) then 1 else null end) as "2-5 años", count(case when ("Edad">5 and "Edad"<13) then 1 else null end) as "6-12 años", count(case when ("Edad">12 and "Edad"<18) then 1 else null end) as "13-17 años", count(case when "Edad">=18 then 1 else null end) as "18-mas años" from gerencial_paciente where ("FechaConsul">%s and "FechaConsul"<%s) group by "Sexo";'
     param_2 = [fecha_inicio, fecha_final]
 
     rep_3 = 'select "habitos" as "Habitos", count(case when "FrecCepilla"=1 then 1 else null end) as "1 vez", count(case when "FrecCepilla"=2 then 1 else null end) as "2 veces", count(case when "FrecCepilla"=3 then 1 else null end) as "3 veces", count(case when "FrecCepilla">3 then 1 else null end) as "4 o mas veces" from (select "FrecCepilla", regexp_split_to_table("HabitosBucal", E%s) as Habitos from gerencial_historialodonto as a join gerencial_paciente as b on a."Paciente_id"=b.id where ("FechaConsul">%s and "FechaConsul"<%s)) as a group by "habitos";'
-    param_3 = [',', fecha_inicio, fecha_final]
+    param_3 = [', ', fecha_inicio, fecha_final]
 
     reportes = [rep_0, rep_1, rep_2, rep_3]
     parametros = [param_0, param_1, param_2, param_3]

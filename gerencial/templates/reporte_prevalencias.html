@@ -234,22 +234,23 @@
         if(parametros.length != 0) {
             parametros = parametros.split("'").join('"');
             parametros = JSON.parse(parametros);
+            cposd = cposd.split("'").join('"');
+            cpose = cpose.split("'").join('"');
+            cpod = cpod.split("'").join('"');
+            ceod = ceod.split("'").join('"');
+            cpom = cpom.split("'").join('"');
+            cposd = JSON.parse(cposd);
+            cpose = JSON.parse(cpose);
+            cpod = JSON.parse(cpod);
+            ceod = JSON.parse(ceod);
+            cpom = JSON.parse(cpom);
         }
         else {
             flag = false;
             parametros = '{"fecha_desde":"","fecha_hasta":"","criterio":"","criterio2":""}';
+            $("#content").remove();
+            $("#container").remove();
         }
-
-        cposd = cposd.split("'").join('"');
-        cpose = cpose.split("'").join('"');
-        cpod = cpod.split("'").join('"');
-        ceod = ceod.split("'").join('"');
-        cpom = cpom.split("'").join('"');
-        cposd = JSON.parse(cposd);
-        cpose = JSON.parse(cpose);
-        cpod = JSON.parse(cpod);
-        ceod = JSON.parse(ceod);
-        cpom = JSON.parse(cpom);
 
         console.log(parametros);
         console.log(cposd);

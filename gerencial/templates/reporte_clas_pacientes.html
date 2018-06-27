@@ -61,7 +61,7 @@
                 </div>
             </div>
         </form>
-    <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
+        <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
         <h4><center>Reporte de Clasificación de Pacientes</center></h4>
         <div class="row">
             <div class="center-align">
@@ -132,67 +132,82 @@
         var fecha_desde = "{{ parametros.fecha_desde|safe }}";
         var fecha_hasta = "{{ parametros.fecha_hasta|safe }}";
         var reporte = "{{ parametros.reporte|safe }}";
-        var fd = new Date(fecha_desde);
-        var fh = new Date(fecha_hasta);
-        fd = new Intl.DateTimeFormat("en-GB").format(fd);
-        fh = new Intl.DateTimeFormat("en-GB").format(fh);
-        reporte = $("#reporte option[value='" + reporte + "']").text();
+        var flag = true;
+        console.log(fecha_desde);
+        console.log(fecha_hasta);
+        console.log(reporte);
 
-        $("#parametros1").text("Datos desde: " + fd + " hasta: " + fh);
-        $("#parametros2").text("Según: " + reporte);
+        if(fecha_desde == null || fecha_desde == "" || fecha_desde == undefined) {
+            flag = false;
+        }
+
+        if(flag) {
+            var fd = new Date(fecha_desde);
+            var fh = new Date(fecha_hasta);
+            fd = new Intl.DateTimeFormat("en-GB").format(fd);
+            fh = new Intl.DateTimeFormat("en-GB").format(fh);
+            reporte = $("#reporte option[value='" + reporte + "']").text();
+
+            $("#parametros1").text("Datos desde: " + fd + " hasta: " + fh);
+            $("#parametros2").text("Según: " + reporte);
+        }
+        else {
+            //Sin consultar
+            $("#boton").remove();
+        }
 
         function demoFromHTML() {
-            var pdf = new jsPDF('p', 'pt', 'letter');
-            // source can be HTML-formatted string, or a reference
-            // to an actual DOM element from which the text will be scraped.
-            var imgData = '{{ imagen }}';
-            pdf.addImage(imgData, 'JPEG', 130, 40, 300, 100);
-            pdf.setFontSize(14);
-            var titulo = "REPORTE DE CLASIFICACIÓN DE PACIENTES";
-            var x1 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(titulo) * pdf.internal.getFontSize() / 2);
-            pdf.text(x1, 170, titulo);
-            pdf.setFontSize(12);
-            var primero = $("#parametros1").text();
-            x2 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(primero) * pdf.internal.getFontSize() / 2);
-            pdf.text(x2, 195, primero);
-            var segundo = $("#parametros2").text();
-            x3 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(segundo) * pdf.internal.getFontSize() / 2);
-            pdf.text(x3, 210, segundo);
-            source = $('#content')[0];
+                var pdf = new jsPDF('p', 'pt', 'letter');
+                // source can be HTML-formatted string, or a reference
+                // to an actual DOM element from which the text will be scraped.
+                var imgData = '{{ imagen }}';
+                pdf.addImage(imgData, 'JPEG', 130, 40, 300, 100);
+                pdf.setFontSize(14);
+                var titulo = "REPORTE DE CLASIFICACIÓN DE PACIENTES";
+                var x1 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(titulo) * pdf.internal.getFontSize() / 2);
+                pdf.text(x1, 170, titulo);
+                pdf.setFontSize(12);
+                var primero = $("#parametros1").text();
+                x2 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(primero) * pdf.internal.getFontSize() / 2);
+                pdf.text(x2, 195, primero);
+                var segundo = $("#parametros2").text();
+                x3 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(segundo) * pdf.internal.getFontSize() / 2);
+                pdf.text(x3, 210, segundo);
+                source = $('#content')[0];
 
-            // we support special element handlers. Register them with jQuery-style
-            // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
-            // There is no support for any other type of selectors
-            // (class, of compound) at this time.
-            specialElementHandlers = {
-                // element with id of "bypass" - jQuery style selector
-                '#bypassme': function (element, renderer) {
-                    // true = "handled elsewhere, bypass text extraction"
-                    return true
-                }
-            };
-            margins = {
-                top: 220,
-                bottom: 60,
-                left: 80,
-                width: 522
-            };
-            // all coords and widths are in jsPDF instance's declared units
-            // 'inches' in this case
-            pdf.fromHTML(
-                source, // HTML string or DOM elem ref.
-                margins.left, // x coord
-                margins.top, { // y coord
-                    'width': margins.width, // max width of content on PDF
-                    'elementHandlers': specialElementHandlers
-                },
+                // we support special element handlers. Register them with jQuery-style
+                // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+                // There is no support for any other type of selectors
+                // (class, of compound) at this time.
+                specialElementHandlers = {
+                    // element with id of "bypass" - jQuery style selector
+                    '#bypassme': function (element, renderer) {
+                        // true = "handled elsewhere, bypass text extraction"
+                        return true
+                    }
+                };
+                margins = {
+                    top: 220,
+                    bottom: 60,
+                    left: 80,
+                    width: 522
+                };
+                // all coords and widths are in jsPDF instance's declared units
+                // 'inches' in this case
+                pdf.fromHTML(
+                    source, // HTML string or DOM elem ref.
+                    margins.left, // x coord
+                    margins.top, { // y coord
+                        'width': margins.width, // max width of content on PDF
+                        'elementHandlers': specialElementHandlers
+                    },
 
-                function (dispose) {
-                    // dispose: object with X, Y of the last line add to the PDF
-                    //          this allow the insertion of new lines after html
-                    pdf.save('ClasificacionPacientes.pdf');
-                }, margins
-            );
+                    function (dispose) {
+                        // dispose: object with X, Y of the last line add to the PDF
+                        //          this allow the insertion of new lines after html
+                        pdf.save('ClasificacionPacientes.pdf');
+                    }, margins
+                );
         }
 </script>
 

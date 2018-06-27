@@ -224,25 +224,23 @@
         if(parametros.length != 0) {
             parametros = parametros.split("'").join('"');
             parametros = JSON.parse(parametros);
+
+            cpod = cpod.split("'").join('"');
+            ceod = ceod.split("'").join('"');
+            cpom = cpom.split("'").join('"');
+            cpos = cpos.split("'").join('"');
+
+            cpod = JSON.parse(cpod);
+            ceod = JSON.parse(ceod);
+            cpom = JSON.parse(cpom);
+            cpos = JSON.parse(cpos);
         }else {
             flag = false;
             parametros = '{"fecha_desde":"","fecha_hasta":"","criterio":""}';
+            $("#container").remove();
+            $("#content").remove();
         }
         console.log(parametros);
-        cpod = cpod.split("'").join('"');
-        ceod = ceod.split("'").join('"');
-        cpom = cpom.split("'").join('"');
-        cpos = cpos.split("'").join('"');
-
-        cpod = JSON.parse(cpod);
-        ceod = JSON.parse(ceod);
-        cpom = JSON.parse(cpom);
-        cpos = JSON.parse(cpos);
-
-        console.log(cpod);
-        console.log(ceod);
-        console.log(cpom);
-        console.log(cpos);
     </script>
     <script src="{% static 'gerencial/js/reporte_frecuencias.js' %}"></script>
 {% block js %}
