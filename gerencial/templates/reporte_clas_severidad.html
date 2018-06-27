@@ -77,6 +77,8 @@
         </div>
 
     <script>
+
+alert("El período de busqueda se ingreso incorrectamente, verifique las fechas seleccionadas.");
     function demoFromHTML() {
         var pdf = new jsPDF('p', 'pt', 'letter');
         // source can be HTML-formatted string, or a reference
@@ -122,9 +124,6 @@ pdf.text(190, 160, "Afectados por Severidad de Caries");
 
     }
 </script>
-
-
-
 
 {% block js %}
          <script type="text/javascript">
