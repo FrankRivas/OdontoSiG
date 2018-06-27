@@ -71,7 +71,7 @@ Highcharts.chart("container", {
         fontSize: "18px"
     }).add();
     chart.setTitle({text:"<div class='col s12'>" +
-        "<div class='offset-s4'><p class='center-align'>INFORME DE SEVERIDAD DE CARIES</p></div></div>"});
+        "<div class='offset-s4'><p class='center-align'>INFORME DE AFECTADOS POR SEVERIDAD DE CARIES</p></div></div>"});
     if(flag == true) {
         var fi = new Date(parametros.fecha_desde);
         var fh = new Date(parametros.fecha_hasta);

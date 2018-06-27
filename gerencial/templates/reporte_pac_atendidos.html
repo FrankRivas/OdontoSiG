@@ -4,11 +4,11 @@
 
         <div class="col s12">
             <div class="offset-s3" style="float:right; padding-top: 2%;">
-                <a class="btn-floating btn-small waves-effect waves-light" onclick="mostrarAyuda();"><i class="material-icons">info</i></a>
+                <a class="btn-floating btn-small waves-effect waves-light modal-trigger" href="#modal1"><i class="material-icons">info</i></a>
             </div>
         </div>
 
-        <div class="">
+        <div class="row">
             <h5 style="text-align: center">Seleccione Criterios de Filtrado</h5>
         </div>
         <form method="post" action="">
@@ -57,7 +57,7 @@
             </div>
         </form>
 
-        <h4><center>Comparativas pacientes</center></h4>
+        <h4><center>Informe de Pacientes Atendidos</center></h4>
         <div id="container" class="col s12" style="height: 700px"></div>
         <div class="row">
             <div class="col s12">
@@ -83,6 +83,35 @@
                 </table>
             </div>
         </div>
+    <div id="modal1" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>Informe de Pacientes Atendidos</h4>
+                <table>
+                    <thead>
+                        <th>Parámetro</th>
+                        <th>Descripción</th>
+                    </thead>
+                    <tobdy>
+                        <tr>
+                            <td>Desde</td>
+                            <td>Fecha desde la cual desea realizar el filtrado</td>
+                        </tr>
+                        <tr>
+                            <td>Hasta</td>
+                            <td>Fecha hasta la cual desea realizar el filtrado</td>
+                        </tr>
+                        <tr>
+                            <td>Criterio</td>
+                            <td>Criterio de Evaluacion que desea (Genero, Grupo Etario, Edades)</td>
+                        </tr>
+                    </tobdy>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
+            </div>
+        </div>
+
 
         <script src="{% static 'gerencial/js/jquery-2.1.1.js' %}" ></script>
         <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/highcharts.src.js' %}" ></script>

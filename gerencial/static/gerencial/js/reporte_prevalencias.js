@@ -146,7 +146,7 @@ Highcharts.chart("container", {
     chart.renderer.text("ceod",400, 530).add();
     chart.renderer.text("CPOM",150, 710).add();
     chart.setTitle({text:"<div class='col s12'>" +
-        "<div class='offset-s4'><p class='center-align'>INFORME DE PREVALENCIA</p></div></div>"});
+        "<div class='offset-s4'><p class='center-align'>INFORME DE PREVALENCIA DE PIEZAS</p></div></div>"});
     if(flag == true) {
         var fi = new Date(parametros.fecha_desde);
         var fh = new Date(parametros.fecha_hasta);
