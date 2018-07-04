@@ -25,9 +25,14 @@
                     {% endfor %}
                     </tbody>
                 </table>
-
+    <script src="{% static 'gerencial/js/base64.js' %}"></script>
     {% block js %}
                 <script type="text/javascript">
+                    var logo = "{% static 'gerencial/img/encabezado.png' %}";
+        to_data_url(logo, function(dataUrl) {
+            logo = dataUrl;
+        });
+
                     $(document).ready(function() {
                         $('#tabla{{ forloop.counter }}').DataTable( {
                             "iDisplayLength": 10,
@@ -72,7 +77,7 @@
                                             doc.content.splice( 1, 0, {
                                                 margin: [ 0, 0, 0, 12 ],
                                                 alignment: 'center',
-                                                image: '{{ image }}'
+                                                image: logo
                                             } );
                                     },
                                 },

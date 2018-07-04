@@ -148,8 +148,12 @@
                 <a href="#!" class="modal-close waves-effect waves-green btn-flat">Cerrar</a>
             </div>
         </div>
-
+    <script src="{% static 'gerencial/js/base64.js' %}"></script>
     <script>
+    var logo = "{% static 'gerencial/img/encabezado.png' %}";
+        to_data_url(logo, function(dataUrl) {
+            logo = dataUrl;
+        });
     var fecha_desde = "{{ parametros.fecha_desde|safe }}";
     var fecha_hasta = "{{ parametros.fecha_hasta|safe }}";
     var etario = "{{ parametros.etario | safe }}";
@@ -176,9 +180,9 @@
         var pdf = new jsPDF('p', 'pt', 'letter');
         // source can be HTML-formatted string, or a reference
         // to an actual DOM element from which the text will be scraped.
-        var imgData = '{{ imagen }}';
+
         pdf.setFontSize(14);
-        pdf.addImage(imgData, 'JPEG', 130, 40, 300, 100);
+        pdf.addImage(logo, 'JPEG', 130, 40, 300, 100);
         pdf.setFontSize(14);
         var titulo = "NECESIDADES DE TRATAMIENTO POR VARIABLES";
         var x1 = (pdf.internal.pageSize.width / 2) - (pdf.getStringUnitWidth(titulo) * pdf.internal.getFontSize() / 2);

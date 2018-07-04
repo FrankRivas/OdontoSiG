@@ -39,7 +39,7 @@
         </form>
 
 
-
+        <script src="{% static 'gerencial/js/base64.js' %}"></script>
         <h4><center>Bitacora de Acciones Realizadas</center></h4>
 
                 <table id="tabla{{ forloop.counter }}" class="table table-striped table-bordered table-hover" data-toggle="bootgrid">
@@ -71,6 +71,11 @@
 
     {% block js %}
                 <script type="text/javascript">
+
+                    var logo = "{% static 'gerencial/img/encabezado.png' %}";
+        to_data_url(logo, function(dataUrl) {
+            logo = dataUrl;
+        });
                     $(document).ready(function() {
                         $('#tabla{{ forloop.counter }}').DataTable( {
                             "iDisplayLength": 10,
@@ -115,7 +120,7 @@
                                             doc.content.splice( 1, 0, {
                                                 margin: [ 0, 0, 0, 12 ],
                                                 alignment: 'center',
-                                                image: '{{ image }}'
+                                                image: logo
                                             } );
                                     },
                                 },
