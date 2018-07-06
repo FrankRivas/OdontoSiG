@@ -106,7 +106,6 @@ def reporte_frec_grupales(request):
         # context = consultar_indices('"EstICDAS"', '1999-01-01', datetime.date.today())
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=12)
     id = id_accion.id
@@ -182,7 +181,6 @@ def reporte_comp_diagnostico(request):
     else:  # Desde el principio de los tiempos
         # context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
         context = {}
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=14)
     id = id_accion.id
@@ -257,7 +255,6 @@ def reporte_est_superficie(request):
         # context = consultar_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=15)
     id = id_accion.id
@@ -333,7 +330,6 @@ def reporte_clas_severidad(request):
         # context = consultar_severidades('"EstICDAS"', '1999-01-01', datetime.date.today())
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=16)
     id = id_accion.id
@@ -386,7 +382,6 @@ def reporte_clas_pacientes(request):
         # context = consultar_pacientes('0', '1999-01-01', datetime.date.today())
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=11)
     id = id_accion.id
@@ -475,7 +470,6 @@ def reporte_nec_trat_svariable(request):
         # context = consultar_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=13)
     id = id_accion.id
@@ -542,7 +536,6 @@ def reporte_pac_atendidos(request):
         # context = pacientes_atendidos('0', '1999-01-01', datetime.date.today())
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=6)
     id = id_accion.id
@@ -602,9 +595,7 @@ def reporte_frecuencias(request):
 
     else:  # Desde el principio de los tiempos
         # context = indices_estrategico('"EstICDAS"', '1999-01-01', datetime.date.today())
-        context = {}
-
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
+	context = {}
 
     id_accion = Accion.objects.get(pk=7)
     id = id_accion.id
@@ -673,7 +664,6 @@ def reporte_prevalencias(request):
         # context = estrategico_prevalencias('"EstICDAS"', '1999-01-01', datetime.date.today())
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=8)
     id = id_accion.id
@@ -755,7 +745,6 @@ def reporte_nec_tratamiento(request):
         # context = estrategico_tratamientos('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17])
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=9)
     id = id_accion.id
@@ -827,7 +816,6 @@ def reporte_severidad(request):
         # context = estrategico_severidades('"EstICDAS"', '1999-01-01', datetime.date.today(), [13, 17], 'M', 'U')
         context = {}
 
-    context['imagen'] = image_to_base64("static/gerencial/img/encabezado.png")
 
     id_accion = Accion.objects.get(pk=10)
     id = id_accion.id
