@@ -66,6 +66,7 @@ Highcharts.chart("container", {
         exporting:{
             enabled:true,
             allowHTML:true,
+            sourceWidth: 800,
             filename: "Informe_Prevelencias",
             buttons: {
                 contextButton: {
@@ -99,52 +100,52 @@ Highcharts.chart("container", {
         //Información en base a la que se construye el gráfico
         series: [
             {
-                center: [ 150, 140 ],
+                center: [ 180, 140 ],
                 type: "pie",
                 name: "Parametro",
                 data: datos1
             },
             {
-                center: [ 400, 140],
+                center: [ 530, 140],
                 type: "pie",
                 name: "Parametro",
                 data: datos2
             },
             {
-                center: [ 150, 350 ],
+                center: [ 180, 350 ],
                 type: "pie",
                 name: "Parametro",
                 data: datos3
             },
             {
-                center: [ 400, 350 ],
+                center: [ 530, 350 ],
                 type: "pie",
                 name: "Parametro",
                 data: datos4
             },
             {
-                center: [ 150, 510 ],
+                center: [ 180, 550 ],
                 type: "pie",
                 name: "Parametro",
                 data: datos5
             }
         ]
 }, function(chart) {
-    chart.renderer.image(logo, 30, 25, 130, 130).add();
-    chart.renderer.text("UNIVERSIDAD DE EL SALVADOR", 200, 60).css({
+    chart.renderer.image(logo, 80, 25, 130, 130).add();
+    chart.renderer.text("UNIVERSIDAD DE EL SALVADOR", 270, 60).css({
         fontSize: "18px"
     }).add();
-    chart.renderer.text('FACULTAD DE ODONTOLOGÍA', 200, 90).css({
+    chart.renderer.text('FACULTAD DE ODONTOLOGÍA', 270, 90).css({
         fontSize: "18px"
     }).add();
-    chart.renderer.text('SCSAB-FOUES', 200, 120).css({
+    chart.renderer.text('SCSAB-FOUES', 270, 120).css({
         fontSize: "18px"
     }).add();
-    chart.renderer.text("CPOS + CPOD", 130, 320).add();
-    chart.renderer.text("CPOS + ceod", 390, 320).add();
-    chart.renderer.text("CPOD",150, 530).add();
-    chart.renderer.text("ceod",400, 530).add();
-    chart.renderer.text("CPOM",150, 710).add();
+    chart.renderer.text("CPOS + CPOD", 170, 330).add();
+    chart.renderer.text("CPOS + ceod", 530, 330).add();
+    chart.renderer.text("CPOD",190, 550).add();
+    chart.renderer.text("ceod",550, 550).add();
+    chart.renderer.text("CPOM",190, 760).add();
     chart.setTitle({text:"<div class='col s12'>" +
         "<div class='offset-s4'><p class='center-align'>INFORME DE PREVALENCIA DE PIEZAS</p></div></div>"});
     if(flag == true) {

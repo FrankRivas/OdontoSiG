@@ -15,18 +15,18 @@
             <div class="layout-row row" style="display: flex; justify-content: center; align-items: center;">
                 <div class="col s12 m6">
                     <div class="row">
+                        <label>Desde</label>
                         <div class="input-field col s12 fecha_desde" id="fecha_desde">
                             <i class="material-icons prefix">date_range</i><input autocomplete="off" data-date-format="d/m/Y" data-form-control="date" data-lang="es" id="fecha" name="fecha_desde" type="text" required>
-                            <label class="active" for="fecha_desde">Desde</label>
                             <div class="help-block">Formato: DD/MM/AAAA</div>
                         </div>
                     </div>
                 </div>
                 <div class="col s12 m6">
                     <div class="row">
+                        <label>Hasta</label>
                         <div class="input-field col s12 fecha_hasta" id="fecha_hasta">
                             <i class="material-icons prefix">date_range</i><input autocomplete="off" data-date-format="d/m/Y" data-form-control="date" data-lang="es" id="fecha" name="fecha_hasta" type="text" required>
-                            <label class="active" for="fecha_hasta">Hasta</label>
                             <div class="help-block">Formato: DD/MM/AAAA</div>
                         </div>
                     </div>
@@ -54,35 +54,11 @@
                 </div>
 
             </div>
-        <!--<div class="layout-row row" style="display: flex; justify-content: center; align-items: center;">
-            <div class="col s12 m7">
-                    <div class="row">
-                        <div class="input-field col s12 criterios" id="criterios">
-                            <i class="material-icons prefix">content_paste</i>
-                            <select name = "criterio2" id="criterio2" >
-                    <option value="0">ICDAS</option>
-                    <option value="1">OMS</option>
-
-</select>
-                            <div class="help-block">Criterio</div>
-                        </div>
-                    </div>
-                </div>
-        <div class="col s12 m5" style="text-align: center;">
-                    <div class="row">
-                        <div class="col s12">
-                            <button class="btn btn-primary"  type="submit">Buscar
-                                <i class="material-icons right">search</i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-        </div> -->
         </form>
 
 
         <h4><center>Informe de Frecuencias Grupales</center></h4>
-        <div id="container" style="height: 780px"></div>
+        <div id="container" style="height: 850px; width: 800px;"></div>
         <div class="row" id="content">
             <div class="col s12">
                 <h6>CPOD</h6>
@@ -211,6 +187,7 @@
     <script src="{% static 'gerencial/js/Highcharts-6.1.0/code/modules/export-data.js' %}" ></script>
     <script src="{% static 'gerencial/js/base64.js' %}"></script>
     <script type="text/javascript">
+
         var logo = "{% static 'gerencial/img/odonto_logo.png' %}";
         to_data_url(logo, function(dataUrl) {
             logo = dataUrl;
@@ -224,6 +201,9 @@
         if(parametros.length != 0) {
             parametros = parametros.split("'").join('"');
             parametros = JSON.parse(parametros);
+
+            var desde = new Intl.DateTimeFormat("en-GB").format(new Date(parametros.fecha_desde));
+            var hasta = new Intl.DateTimeFormat("en-GB").format(new Date(parametros.fecha_hasta));
 
             cpod = cpod.split("'").join('"');
             ceod = ceod.split("'").join('"');
@@ -240,7 +220,6 @@
             $("#container").remove();
             $("#content").remove();
         }
-        console.log(parametros);
     </script>
     <script src="{% static 'gerencial/js/reporte_frecuencias.js' %}"></script>
 {% block js %}
@@ -267,6 +246,7 @@
                 orientation: "bottom auto",
                 container: "div.fecha_desde"
             });
+
             $('input[name="fecha_hasta"]').dblclick(function() {
                 $('input[name="fecha_hasta"]').datepicker('show');
             });
@@ -285,6 +265,8 @@
                 orientation: "bottom auto",
                 container: "div.fecha_hasta"
             });
+            $("input[name='fecha_desde']").datepicker("setDate", desde);
+            $("input[name='fecha_hasta']").datepicker("setDate", hasta);
         });
     </script>
 

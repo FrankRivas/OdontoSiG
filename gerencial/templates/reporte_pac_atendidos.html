@@ -16,18 +16,18 @@
             <div class="layout-row row" style="display: flex; justify-content: center; align-items: center;">
                 <div class="col s12 m6">
                     <div class="row">
+                        <label>Desde</label>
                         <div class="input-field col s12 fecha_desde" id="fecha_desde">
                             <i class="material-icons prefix">date_range</i><input autocomplete="off" data-date-format="d/m/Y" data-form-control="date" data-lang="es" id="fecha" name="fecha_desde" type="text" required>
-                            <label class="active" for="fecha_desde">Desde</label>
                             <div class="help-block">Formato: DD/MM/AAAA</div>
                         </div>
                     </div>
                 </div>
                 <div class="col s12 m6">
                     <div class="row">
+                        <label>Hasta</label>
                         <div class="input-field col s12 fecha_hasta" id="fecha_hasta">
                             <i class="material-icons prefix">date_range</i><input autocomplete="off" data-date-format="d/m/Y" data-form-control="date" data-lang="es" id="fecha" name="fecha_hasta" type="text" required>
-                            <label class="active" for="fecha_hasta">Hasta</label>
                             <div class="help-block">Formato: DD/MM/AAAA</div>
                         </div>
                     </div>
@@ -127,6 +127,9 @@
             if(parametros.length != 0) {
                 parametros = parametros.split("'").join('"');
                 parametros = JSON.parse(parametros);
+
+                var desde = new Intl.DateTimeFormat("en-GB").format(new Date(parametros.fecha_desde));
+                var hasta = new Intl.DateTimeFormat("en-GB").format(new Date(parametros.fecha_hasta));
             } else {
                 flag = false;
                 parametros = '{"fecha_desde":"","fecha_hasta":"","reporte":"0"}';
@@ -184,6 +187,8 @@
                 container: "div.fecha_hasta"
             });
             $("input[name='fecha_hasta']").mask("00/00/0000");
+            $("input[name='fecha_desde']").datepicker("setDate", desde);
+            $("input[name='fecha_hasta']").datepicker("setDate", hasta);
         });
     </script>
 {% endblock %}

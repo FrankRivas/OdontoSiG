@@ -18,18 +18,18 @@
             <div class="layout-row row" style="display: flex; justify-content: center; align-items: center;">
                 <div class="col s12 m6">
                     <div class="row">
+                        <label>Desde</label>
                         <div class="input-field col s12 fecha_desde" id="fecha_desde">
                             <i class="material-icons prefix">date_range</i><input autocomplete="off" data-date-format="d/m/Y" data-form-control="date" data-lang="es" id="fecha" name="fecha_desde" type="text" required>
-                            <label class="active" for="fecha_desde">Desde</label>
                             <div class="help-block">Formato: DD/MM/AAAA</div>
                         </div>
                     </div>
                 </div>
                 <div class="col s12 m6">
                     <div class="row">
+                        <label>Hasta</label>
                         <div class="input-field col s12 fecha_hasta" id="fecha_hasta">
                             <i class="material-icons prefix">date_range</i><input autocomplete="off" data-date-format="d/m/Y" data-form-control="date" data-lang="es" id="fecha" name="fecha_hasta" type="text" required>
-                            <label class="active" for="fecha_hasta">Hasta</label>
                             <div class="help-block">Formato: DD/MM/AAAA</div>
                         </div>
                     </div>
@@ -73,7 +73,12 @@
                 </div>
         </div>
         </form>
-        <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
+        <div class="row">
+            <div class="right-align">
+                <a class="btn btn-default" href="javascript:demoFromHTML()" type="submit" id="boton" style="background: #e9e9e9; color: black; font-size: 0.88em">PDF</a>
+            </div>
+        </div>
+
         <h4><center>Necesidades de Tratamiento por Variables</center></h4>
 
         <div id="content">
@@ -274,6 +279,8 @@
                     orientation: "bottom auto",
                     container: "div.fecha_hasta"
                 });
+                $("input[name='fecha_desde']").datepicker("setDate", fd);
+                $("input[name='fecha_hasta']").datepicker("setDate", fh);
             });
         </script>
 

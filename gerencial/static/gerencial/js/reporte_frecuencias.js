@@ -6,31 +6,39 @@ var ward = 0;
 var higher = 0;
 
 for(var i1 = 0; i1 < cpod.length; i1++) {
-    datos1.push({
-        name: cpod[i1].estado,
-        y: cpod[i1].cantidad
-    });
+    if(cpod[i1].estado != "Total") {
+        datos1.push({
+            name: cpod[i1].estado,
+            y: cpod[i1].cantidad
+        });
+    }
 }
 
 for(var i2 = 0; i2 < ceod.length; i2++) {
-    datos2.push({
-        name: ceod[i2].estado,
-        y: ceod[i2].cantidad
-    });
+    if(ceod[i2].estado != "Total") {
+        datos2.push({
+            name: ceod[i2].estado,
+            y: ceod[i2].cantidad
+        });
+    }
 }
 
 for(var i3 = 0; i3 < cpom.length; i3++) {
-    datos3.push({
-        name: cpom[i3].estado,
-        y: cpom[i3].cantidad
-    });
+    if(cpom[i3].estado != "Total") {
+        datos3.push({
+            name: cpom[i3].estado,
+            y: cpom[i3].cantidad
+        });
+    }
 }
 
 for(var i4 = 0; i4 < cpos.length; i4++) {
-    datos4.push({
-        name: cpos[i4].estado,
-        y: cpos[i4].cantidad
-    });
+    if(cpos[i4].estado != "Total") {
+        datos4.push({
+            name: cpos[i4].estado,
+            y: cpos[i4].cantidad
+        });
+    }
 }
 
 var temporal = [datos1, datos2, datos3, datos4];
@@ -58,6 +66,7 @@ Highcharts.chart("container", {
         exporting:{
             enabled:true,
             allowHTML:true,
+            sourceWidth: 750,
             filename: "Informe_Frencuencias",
             buttons: {
                 contextButton: {
@@ -91,45 +100,47 @@ Highcharts.chart("container", {
         //Información en base a la que se construye el gráfico
         series: [
             {
-                center: [ 150, 140 ],
+                center: [ 170, 140 ],
                 type: "pie",
                 name: "Parametro",
                 data: datos1
             },
             {
-                center: [ 400, 140],
+                center: [ 520, 140],
                 type: "pie",
                 name: "Parametro",
                 data: datos2
             },
             {
-                center: [ 150, 350 ],
+                center: [ 170, 400 ],
                 type: "pie",
                 name: "Parametro",
                 data: datos3
             },
             {
-                center: [ 400, 350 ],
+                center: [ 520, 400 ],
                 type: "pie",
                 name: "Parametro",
                 data: datos4
             }
         ]
 }, function(chart) {
-    chart.renderer.image(logo, 30, 25, 130, 130).add();
-    chart.renderer.text("UNIVERSIDAD DE EL SALVADOR", 200, 60).css({
+    var newX = chart.plotWidth / 2 + chart.plotLeft;
+    var newY = chart.plotHeight / 2 + chart.plotTop;
+    chart.renderer.image(logo, 120, 25, 130, 130).add();
+    chart.renderer.text("UNIVERSIDAD DE EL SALVADOR", 280, 60).css({
         fontSize: "18px"
     }).add();
-    chart.renderer.text('FACULTAD DE ODONTOLOGÍA', 200, 90).css({
+    chart.renderer.text('FACULTAD DE ODONTOLOGÍA', 280, 90).css({
         fontSize: "18px"
     }).add();
-    chart.renderer.text('SCSAB-FOUES', 200, 120).css({
+    chart.renderer.text('SCSAB-FOUES', 280, 120).css({
         fontSize: "18px"
     }).add();
-    chart.renderer.text("CPOD", 150, 320).add();
-    chart.renderer.text("ceod", 410, 320).add();
-    chart.renderer.text("CPOM",150, 530).add();
-    chart.renderer.text("CPOS",400, 530).add();
+    chart.renderer.text("CPOD", 190, 340).add();
+    chart.renderer.text("ceod", 530, 340).add();
+    chart.renderer.text("CPOM",190, 590).add();
+    chart.renderer.text("CPOS",520, 590).add();
     chart.setTitle({text:"<div class='col s12'>" +
         "<div class='offset-s4'><p class='center-align'>INFORME DE FRECUENCIAS GRUPALES</p></div></div>"});
     if(flag == true) {
