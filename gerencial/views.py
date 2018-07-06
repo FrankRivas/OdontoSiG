@@ -595,7 +595,7 @@ def reporte_frecuencias(request):
 
     else:  # Desde el principio de los tiempos
         # context = indices_estrategico('"EstICDAS"', '1999-01-01', datetime.date.today())
-	context = {}
+	    context = {}
 
     id_accion = Accion.objects.get(pk=7)
     id = id_accion.id

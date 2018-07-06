@@ -71,12 +71,8 @@ Highcharts.chart("container",{
     chart.setTitle({text:"<div class='col s12'>" +
         "<div class='offset-s4'><p class='center-align'>INFORME DE PACIENTES ATENDIDOS</p></div></div>"});
     if(flag == true) {
-        var fi = new Date(parametros.fecha_desde);
-        var fh = new Date(parametros.fecha_hasta);
-        fi = new Intl.DateTimeFormat("en-GB").format(fi);
-        fh = new Intl.DateTimeFormat("en-GB").format(fh);
         chart.setSubtitle({text: "<div class='col s12'>" +
-            "<div class='row'><p class='center-align'>Datos desde:" + fi + " hasta: " + fh + "</p><br></div>" +
+            "<div class='row'><p class='center-align'>Datos desde:" + desde + " hasta: " + hasta + "</p><br></div>" +
             "<div class='row'><p class='center-align'>Según "+ $("#reporte option[value='" + parametros.reporte + "']").text() + "</p></div>" +
             "</div>"});
     } else {
