@@ -143,6 +143,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+venv_gerencial/
 
 # Spyder project settings
 .spyderproject
@@ -162,3 +163,7 @@ venv.bak/
 
 Pycharm
 .idea/*
+
+#Static
+
+static/
