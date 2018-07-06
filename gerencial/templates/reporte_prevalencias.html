@@ -235,8 +235,14 @@
             parametros = parametros.split("'").join('"');
             parametros = JSON.parse(parametros);
 
-            var desde = new Intl.DateTimeFormat("en-GB").format(new Date(parametros.fecha_desde));
-            var hasta = new Intl.DateTimeFormat("en-GB").format(new Date(parametros.fecha_hasta));
+            var desde = new Date(parametros.fecha_desde);
+            var hasta = new Date(parametros.fecha_hasta);
+
+            desde = new Date(desde.getTime() + Math.abs(desde.getTimezoneOffset() * 60000));
+            hasta = new Date(hasta.getTime() + Math.abs(hasta.getTimezoneOffset() * 60000));
+
+            desde = new Intl.DateTimeFormat("en-GB").format(new Date(desde));
+            hasta = new Intl.DateTimeFormat("en-GB").format(new Date(hasta));
 
             cposd = cposd.split("'").join('"');
             cpose = cpose.split("'").join('"');

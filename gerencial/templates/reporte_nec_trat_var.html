@@ -172,6 +172,10 @@
     if(flag) {
         var fd = new Date(fecha_desde);
         var fh = new Date(fecha_hasta);
+
+        fd = new Date(fd.getTime() + Math.abs(fd.getTimezoneOffset() * 60000));
+        fh = new Date(fh.getTime() + Math.abs(fh.getTimezoneOffset() * 60000));
+
         fd = new Intl.DateTimeFormat("en-GB").format(fd);
         fh = new Intl.DateTimeFormat("en-GB").format(fh);
         etario = $("#etario option[value='" + etario + "']").text();
